@@ -1,0 +1,123 @@
+<case id="Aftercare.case" name="Aftercare" guid="_cP4EE">
+    <caseFileModel>
+        <caseFileItem id="_kKXk1_0" name="Patient" multiplicity="ExactlyOne" definitionRef="patient.cfid"/>
+        <caseFileItem id="_cP4EE_3" name="Appointment" multiplicity="ExactlyOne" definitionRef="appointment.cfid"/>
+        <caseFileItem id="_cP4EE_2" name="Notes" multiplicity="ExactlyOne" definitionRef="notes.cfid"/>
+    </caseFileModel>
+    <casePlanModel id="cm__kKXk1_0" name="Aftercare" autoComplete="true">
+        <planItem id="pi_ht__kKXk1_0" name="Send weekly information" definitionRef="ht__kKXk1_0"/>
+        <planItem id="pi_ct__kKXk1_0" name="Meet patient weekly" definitionRef="ct__kKXk1_0">
+            <itemControl id="_kKXk1_2" name="ItemControl_1">
+                <repetitionRule id="_kKXk1_9" name="Constraint_0">
+                    <condition id="_kKXk1_10" name="Expression_0" language="spel">
+                        <body>
+                            <![CDATA[true]]>
+                        </body>
+                    </condition>
+                </repetitionRule>
+            </itemControl>
+        </planItem>
+        <planningTable id="_kKXk1_20" name="PlanningTable_0">
+            <discretionaryItem id="pi_ct__kKXk1_1" name="Plan Appointment with Special Nurse" description="Plan Appointment &#10;with Special Nurse" definitionRef="ct__kKXk1_1">
+                <itemControl id="_kKXk1_11" name="ItemControl_2">
+                    <repetitionRule id="_kKXk1_18" name="Constraint_1">
+                        <condition id="_kKXk1_19" name="Expression_1" language="spel">
+                            <body>
+                                <![CDATA[true]]>
+                            </body>
+                        </condition>
+                    </repetitionRule>
+                </itemControl>
+            </discretionaryItem>
+        </planningTable>
+        <humanTask id="ht__kKXk1_0" name="Send weekly information" isBlocking="true">
+            <inputs id="_cP4EE_4" name="Notes" bindingRef="_cP4EE_2"/>
+            <outputs id="_cP4EE_6" name="Notes" bindingRef="_cP4EE_2"/>
+            <extensionElements mustUnderstand="false">
+                <batav:implementation xmlns:batav="io.batav" humanTaskRef="NotesHT.humantask">
+                    <parameterMapping id="_cP4EE_5" name="ParameterMapping_1" sourceRef="_cP4EE_4" targetRef="_js9D_Notes"/>
+                    <parameterMapping id="_cP4EE_7" name="ParameterMapping_4" sourceRef="_L3ka_Notes" targetRef="_cP4EE_6"/>
+                </batav:implementation>
+            </extensionElements>
+        </humanTask>
+        <caseTask id="ct__kKXk1_0" name="Meet patient weekly" isBlocking="true" caseRef="Appointment.case">
+            <inputs id="_kKXk1_3" name="Patient" bindingRef="_kKXk1_0"/>
+            <outputs id="_kKXk1_7" name="Appointment" bindingRef="_cP4EE_3"/>
+            <parameterMapping id="_kKXk1_4" name="ParameterMapping_0" sourceRef="_kKXk1_3" targetRef="_Zjy8C_6"/>
+            <parameterMapping id="_kKXk1_8" name="ParameterMapping_2" sourceRef="_Zjy8C_5" targetRef="_kKXk1_7"/>
+        </caseTask>
+        <caseTask id="ct__kKXk1_1" name="Plan Appointment with Special Nurse" description="Plan Appointment &#10;with Special Nurse" isBlocking="true" caseRef="Appointment.case">
+            <inputs id="_kKXk1_12" name="Patient" bindingRef="_kKXk1_0"/>
+            <outputs id="_kKXk1_16" name="Appointment" bindingRef="_cP4EE_3"/>
+            <parameterMapping id="_kKXk1_13" name="ParameterMapping_3" sourceRef="_kKXk1_12" targetRef="_Zjy8C_6"/>
+            <parameterMapping id="_kKXk1_17" name="ParameterMapping_5" sourceRef="_Zjy8C_5" targetRef="_kKXk1_16"/>
+        </caseTask>
+    </casePlanModel>
+    <input id="_cP4EE_1" name="Patient" bindingRef="_kKXk1_0"/>
+    <extensionElements mustUnderstand="false">
+        <batav:start-case-model xmlns:batav="io.batav">{
+	"schema": {
+		"type": "object",
+		"properties": {
+			"Patient": {
+				"$ref": "#/definitions/Patient"
+			}
+		},
+		"definitions": {
+			"Patient": {
+				"title": "Patient Details",
+				"description": "Please fill details",
+				"type": "object",
+				"required": [
+					"ID",
+					"Name"
+				],
+				"properties": {
+					"Name": {
+						"type": "string",
+						"title": "Name",
+						"default": "Name"
+					},
+					"Gender": {
+						"type": "string",
+						"title": "Gender"
+					},
+					"DateOfBirth": {
+						"type": "string",
+						"format": "date",
+						"title": "Date of Birth"
+					},
+					"Address": {
+						"type":"string",
+						"title": "Address"
+					},
+					"ID": {
+						"type": "string",
+						"title": "PatientID",
+						"default": "ID"
+					},
+					"Active": {
+						"type": "boolean",
+						"title": "Active"
+					},
+					"Telecom": {
+						"type": "string",
+						"title": "Telecom",
+						"minLength": 10
+					},
+					"Email": {
+						"type": "string",
+						"title": "Email"
+					}
+				}
+			}
+		}
+	},
+	"uiSchema": {
+		"Address": {
+			"ui:widget": "textarea"
+		}
+	}
+}</batav:start-case-model>
+    </extensionElements>
+</case>

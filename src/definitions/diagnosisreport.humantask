@@ -1,0 +1,47 @@
+<humantask>
+    <batav:implementation xmlns:batav="io.batav" name="diagnosisreport" description="Diagnosis Report" class="io.batav.cmmn.definition.task.WorkflowTaskDefinition">
+        <output id="_mN7g_Diagnosis" name="Diagnosis"/>
+        <task-model>{
+	"schema": {
+		"type": "object",
+		"properties": {
+			"Diagnosis": {
+				"$ref": "#/definitions/Diagnosis"
+			}
+		},
+		"definitions": {
+			"Diagnosis": {
+                "type": "object",
+                "properties": {
+                  "Condition": {
+                    "type": "string",
+                    "title": "Condition",
+                    "default": "Condition of Patient"
+                  },
+                  "Use": {
+                    "type": "string",
+                    "title": "Use",
+                    "default": "Use"
+                  },
+                  "Rank": {
+                    "type": "string",
+                    "title": "Rank",
+                    "default": "Rank of Cancer"
+                  },
+                  "Notes": {
+                    "type": "string",
+                    "title": "Notes",
+                    "default": "Notes"
+                  },
+                  "Date": {
+                    "type": "string",
+                    "format": "date",
+                    "title": "Date"
+                  }
+                }
+			}
+		}
+	}
+}</task-model>
+    </batav:implementation>
+</humantask>

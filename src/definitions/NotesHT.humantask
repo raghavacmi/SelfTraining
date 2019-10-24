@@ -1,0 +1,47 @@
+<humantask>
+    <batav:implementation xmlns:batav="io.batav" name="NotesHT" description="Notes Human Task" class="io.batav.cmmn.definition.task.WorkflowTaskDefinition">
+        <input id="_js9D_Notes" name="Notes"/>
+        <output id="_L3ka_Notes" name="Notes"/>
+        <task-model>{
+	"schema": {
+		"type": "object",
+		"properties": {
+			"Notes": {
+				"$ref": "#/definitions/Notes"
+			}
+		},
+		"definitions": {
+			"Notes": {
+				"type": "object",
+				"properties": {
+					"Contents": {
+						"type": "string",
+						"title": "Contents",
+						"default": "Contents related Diagonsis of the Patient"
+					},
+					"Date": {
+						"type": "string",
+						"format": "date",
+						"title": "Date"
+					},
+					"Author": {
+						"type": "string",
+						"title": "Author",
+						"default": "Author"
+					}
+				}
+			}
+		}
+	},
+	"uiSchema": {
+		"Notes": {
+			"properties": {
+				"Contents": {
+					"ui:widget": "textarea"
+				}
+			}
+		}
+	}
+}</task-model>
+    </batav:implementation>
+</humantask>

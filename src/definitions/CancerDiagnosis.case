@@ -1,0 +1,402 @@
+<case id="CancerDiagnosis.case" name="CancerDiagnosis" description="Cancer Diagnosis and Treatment" guid="_wWbNi">
+    <caseFileModel>
+        <caseFileItem id="_wWbNi_8" name="Patient" multiplicity="ExactlyOne" definitionRef="patient.cfid"/>
+        <caseFileItem id="_wWbNi_15" name="Diagnosis" multiplicity="ZeroOrMore" definitionRef="diagnosis.cfid"/>
+        <caseFileItem id="_wWbNi_83" name="TreatmentProposal" multiplicity="ExactlyOne" definitionRef="treatmentproposal.cfid"/>
+        <caseFileItem id="_wWbNi_78" name="Provider" multiplicity="ExactlyOne" definitionRef="person.cfid"/>
+        <caseFileItem id="_wWbNi_86" name="Appointment" multiplicity="ExactlyOne" definitionRef="appointment.cfid"/>
+        <caseFileItem id="_wWbNi_95" name="Practitioner" multiplicity="ExactlyOne" definitionRef="practitioner.cfid"/>
+        <caseFileItem id="_wWbNi_91" name="Encounter" multiplicity="ExactlyOne" definitionRef="encounter.cfid">
+            <children>
+                <caseFileItem id="_wWbNi_104" name="Diagnosis" multiplicity="ZeroOrMore" definitionRef="diagnosis.cfid"/>
+            </children>
+        </caseFileItem>
+        <caseFileItem id="_wWbNi_89" name="CarePlan" multiplicity="ZeroOrMore" definitionRef="notes.cfid"/>
+        <caseFileItem id="_wWbNi_121" name="Tests" multiplicity="ZeroOrMore" definitionRef="tests.cfid">
+            <children>
+                <caseFileItem id="_wWbNi_130" name="TestNotes" multiplicity="ExactlyOne" definitionRef="testnotes.cfid"/>
+            </children>
+        </caseFileItem>
+        <caseFileItem id="_wWbNi_81" name="Notes" multiplicity="ExactlyOne" definitionRef="notes.cfid"/>
+    </caseFileModel>
+    <casePlanModel id="cm__wWbNi_0" name="Cancer Diagnosis and Treatment" autoComplete="true">
+        <planItem id="pi__wWbNi_0" name="Diagnosis" definitionRef="_wWbNi_0"/>
+        <planItem id="pi__wWbNi_93" name="Treatment" definitionRef="_wWbNi_93">
+            <entryCriterion id="_wWbNi_80" name="EntryCriterion_6" sentryRef="crit__wWbNi_14"/>
+        </planItem>
+        <planItem id="pi_ue__wWbNi_0" name="Start AfterCare" definitionRef="ue__wWbNi_0"/>
+        <planItem id="pi_ct__wWbNi_3" name="Aftercare" definitionRef="ct__wWbNi_3">
+            <entryCriterion id="_wWbNi_19" name="EntryCriterion_2" sentryRef="crit__wWbNi_8"/>
+        </planItem>
+        <planItem id="pi__wWbNi_45" name="Rehabilitation" definitionRef="_wWbNi_45">
+            <entryCriterion id="_wWbNi_20" name="EntryCriterion_3" sentryRef="crit__wWbNi_9"/>
+        </planItem>
+        <planItem id="pi_ue__wWbNi_1" name="Cancel Treatment" description="Cancel&#10;Treatment" definitionRef="ue__wWbNi_1"/>
+        <sentry id="crit__wWbNi_8" name="Sentry_8">
+            <planItemOnPart id="_wWbNi_44" name="PlanItemOnPart_8" sourceRef="pi_ue__wWbNi_0">
+                <standardEvent>occur</standardEvent>
+            </planItemOnPart>
+        </sentry>
+        <sentry id="crit__wWbNi_9" name="Sentry_9">
+            <planItemOnPart id="_wWbNi_47" name="PlanItemOnPart_9" sourceRef="pi_ct__wWbNi_3">
+                <standardEvent>complete</standardEvent>
+            </planItemOnPart>
+        </sentry>
+        <sentry id="crit__wWbNi_11" name="Sentry_11">
+            <planItemOnPart id="_wWbNi_64" name="PlanItemOnPart_11" sourceRef="pi_ue__wWbNi_1">
+                <standardEvent>occur</standardEvent>
+            </planItemOnPart>
+        </sentry>
+        <sentry id="crit__wWbNi_7" name="Sentry_7">
+            <planItemOnPart id="_wWbNi_107" name="PlanItemOnPart_7" sourceRef="pi_ms__wWbNi_0">
+                <standardEvent>occur</standardEvent>
+            </planItemOnPart>
+        </sentry>
+        <sentry id="crit__wWbNi_14" name="Sentry_14">
+            <planItemOnPart id="_wWbNi_94" name="PlanItemOnPart_3" sourceRef="pi_ms__wWbNi_0">
+                <standardEvent>occur</standardEvent>
+            </planItemOnPart>
+        </sentry>
+        <planningTable id="_wWbNi_40" name="PlanningTable_2">
+            <discretionaryItem id="pi_ct__wWbNi_1" name="Surgery" definitionRef="ct__wWbNi_1" applicabilityRuleRefs="_wWbNi_145" authorizedRoleRefs="_wWbNi_24">
+                <itemControl id="_wWbNi_33" name="ItemControl_9">
+                    <repetitionRule id="_wWbNi_35" name="Constraint_2">
+                        <condition id="_wWbNi_38" name="Expression_2" language="spel">
+                            <body>
+                                <![CDATA[true]]>
+                            </body>
+                        </condition>
+                    </repetitionRule>
+                </itemControl>
+            </discretionaryItem>
+            <discretionaryItem id="pi_ct__wWbNi_2" name="Radiotherapy" definitionRef="ct__wWbNi_2" applicabilityRuleRefs="_wWbNi_147" authorizedRoleRefs="_wWbNi_31">
+                <entryCriterion id="_wWbNi_100" name="EntryCriterion_1" sentryRef="crit__wWbNi_7"/>
+                <itemControl id="_wWbNi_2" name="ItemControl_0">
+                    <repetitionRule id="_wWbNi_105" name="Constraint_0">
+                        <condition id="_wWbNi_106" name="Expression_0" language="spel">
+                            <body>
+                                <![CDATA[true]]>
+                            </body>
+                        </condition>
+                    </repetitionRule>
+                </itemControl>
+            </discretionaryItem>
+            <discretionaryItem id="pi_ht__wWbNi_6" name="Cancer Tests" definitionRef="ht__wWbNi_6" authorizedRoleRefs="_wWbNi_138 _wWbNi_24">
+                <itemControl id="_wWbNi_132" name="ItemControl_19">
+                    <repetitionRule id="_wWbNi_139" name="Constraint_9">
+                        <condition id="_wWbNi_140" name="Expression_9" language="spel">
+                            <body>
+                                <![CDATA[true]]>
+                            </body>
+                        </condition>
+                    </repetitionRule>
+                </itemControl>
+            </discretionaryItem>
+            <applicabilityRule id="_wWbNi_145" name="SurgeryApplicable" contextRef="_wWbNi_83">
+                <condition id="_wWbNi_146" name="Expression_10" language="spel">
+                    <body>
+                        <![CDATA[TreatmentProposal.SurgeryRequired==true]]>
+                    </body>
+                </condition>
+            </applicabilityRule>
+            <applicabilityRule id="_wWbNi_147" name="RadiotherapyApplicable" contextRef="_wWbNi_83">
+                <condition id="_wWbNi_148" name="Expression_12" language="spel">
+                    <body>
+                        <![CDATA[TreatmentProposal.RadiotherapyRequired==true]]>
+                    </body>
+                </condition>
+            </applicabilityRule>
+        </planningTable>
+        <exitCriterion id="_wWbNi_3" name="ExitCriterion_0" sentryRef="crit__wWbNi_11"/>
+        <humanTask id="ht__wWbNi_0" name="Radiology Scan" isBlocking="true">
+            <inputs id="_wWbNi_82" name="Notes" bindingRef="_wWbNi_81"/>
+            <outputs id="_wWbNi_96" name="Notes" bindingRef="_wWbNi_81"/>
+            <extensionElements mustUnderstand="false">
+                <batav:implementation xmlns:batav="io.batav" humanTaskRef="NotesHT.humantask">
+                    <parameterMapping id="_wWbNi_85" name="ParameterMapping_9" sourceRef="_wWbNi_82" targetRef="_js9D_Notes"/>
+                    <parameterMapping id="_wWbNi_99" name="ParameterMapping_13" sourceRef="_L3ka_Notes" targetRef="_wWbNi_96"/>
+                </batav:implementation>
+            </extensionElements>
+        </humanTask>
+        <humanTask id="ht__wWbNi_1" name="Radiologist Report" description="Radiologist&#10;Report" isBlocking="true" performerRef="_wWbNi_31">
+            <outputs id="_wWbNi_120" name="Diagnosis" bindingRef="_wWbNi_15"/>
+            <extensionElements mustUnderstand="false">
+                <batav:implementation xmlns:batav="io.batav" humanTaskRef="diagnosisreport.humantask">
+                    <parameterMapping id="_wWbNi_131" name="ParameterMapping_23" sourceRef="_mN7g_Diagnosis" targetRef="_wWbNi_120"/>
+                </batav:implementation>
+            </extensionElements>
+        </humanTask>
+        <humanTask id="ht__wWbNi_4" name="Observation from Multidisciplinary Team" description="Observation from&#10;Multidisciplinary Team" isBlocking="true">
+            <outputs id="_wWbNi_142" name="Diagnosis" bindingRef="_wWbNi_15"/>
+            <extensionElements mustUnderstand="false">
+                <batav:implementation xmlns:batav="io.batav" humanTaskRef="diagnosisreport.humantask">
+                    <parameterMapping id="_wWbNi_143" name="ParameterMapping_27" sourceRef="_mN7g_Diagnosis" targetRef="_wWbNi_142"/>
+                </batav:implementation>
+            </extensionElements>
+        </humanTask>
+        <humanTask id="ht__wWbNi_3" name="Encounter" description="Encounter and&#10;Diagnosis Notes" isBlocking="true">
+            <outputs id="_wWbNi_110" name="Diagnosis" bindingRef="_wWbNi_15"/>
+            <extensionElements mustUnderstand="false">
+                <batav:implementation xmlns:batav="io.batav" humanTaskRef="diagnosisreport.humantask">
+                    <parameterMapping id="_wWbNi_111" name="ParameterMapping_18" sourceRef="_mN7g_Diagnosis" targetRef="_wWbNi_110"/>
+                </batav:implementation>
+            </extensionElements>
+        </humanTask>
+        <humanTask id="ht__wWbNi_2" name="Care Plan" isBlocking="true" performerRef="_wWbNi_24">
+            <outputs id="_wWbNi_69" name="CarePlan" bindingRef="_wWbNi_89"/>
+            <extensionElements mustUnderstand="false">
+                <batav:implementation xmlns:batav="io.batav" humanTaskRef="careplan.humantask">
+                    <parameterMapping id="_wWbNi_74" name="ParameterMapping_11" sourceRef="_Q21F_CarePlan" targetRef="_wWbNi_69"/>
+                </batav:implementation>
+            </extensionElements>
+        </humanTask>
+        <humanTask id="ht__wWbNi_5" name="Update Care Plan" isBlocking="true" performerRef="_wWbNi_24">
+            <outputs id="_wWbNi_101" name="CarePlan" bindingRef="_wWbNi_89"/>
+            <extensionElements mustUnderstand="false">
+                <batav:implementation xmlns:batav="io.batav" humanTaskRef="careplan.humantask">
+                    <parameterMapping id="_wWbNi_112" name="ParameterMapping_15" sourceRef="_Q21F_CarePlan" targetRef="_wWbNi_101"/>
+                </batav:implementation>
+            </extensionElements>
+        </humanTask>
+        <humanTask id="ht__wWbNi_6" name="Cancer Tests" isBlocking="true">
+            <inputs id="_wWbNi_133" name="Tests" bindingRef="_wWbNi_121"/>
+            <outputs id="_wWbNi_135" name="Tests" bindingRef="_wWbNi_121"/>
+            <extensionElements mustUnderstand="false">
+                <batav:implementation xmlns:batav="io.batav" humanTaskRef="cancertests.humantask">
+                    <parameterMapping id="_wWbNi_134" name="ParameterMapping_20" sourceRef="_wWbNi_133" targetRef="_3ELs_Tests"/>
+                    <parameterMapping id="_wWbNi_136" name="ParameterMapping_21" sourceRef="_Hhvq_Tests" targetRef="_wWbNi_135"/>
+                </batav:implementation>
+            </extensionElements>
+        </humanTask>
+        <humanTask id="ht__wWbNi_7" name="Treatment Proposed" isBlocking="true" performerRef="_wWbNi_24">
+            <inputs id="_wWbNi_152" name="TreatmentProposal" bindingRef="_wWbNi_83"/>
+            <outputs id="_wWbNi_154" name="TreatmentProposal" bindingRef="_wWbNi_83"/>
+            <extensionElements mustUnderstand="false">
+                <batav:implementation xmlns:batav="io.batav" humanTaskRef="multidisciplinaryteam.humantask">
+                    <parameterMapping id="_wWbNi_153" name="ParameterMapping_29" sourceRef="_wWbNi_152" targetRef="_nzHo_TreatmentProposal"/>
+                    <parameterMapping id="_wWbNi_155" name="ParameterMapping_30" sourceRef="_FE1s_TreatmentProposal" targetRef="_wWbNi_154"/>
+                </batav:implementation>
+            </extensionElements>
+        </humanTask>
+        <caseTask id="ct__wWbNi_1" name="Surgery" isBlocking="true" caseRef="Surgery.case">
+            <inputs id="_wWbNi_5" name="Patient" bindingRef="_wWbNi_8"/>
+            <parameterMapping id="_wWbNi_1" name="ParameterMapping_0" sourceRef="_wWbNi_5" targetRef="_uzkt7_6"/>
+        </caseTask>
+        <caseTask id="ct__wWbNi_2" name="Radiotherapy" isBlocking="true" caseRef="Radiotherapy.case">
+            <inputs id="_wWbNi_7" name="Patient" bindingRef="_wWbNi_8"/>
+            <parameterMapping id="_wWbNi_6" name="ParameterMapping_1" sourceRef="_wWbNi_7" targetRef="_cYuxH_2"/>
+        </caseTask>
+        <caseTask id="ct__wWbNi_3" name="Aftercare" isBlocking="true" caseRef="Aftercare.case"/>
+        <caseTask id="ct__wWbNi_4" name="First Appointment" description="First&#10;Appointment" isBlocking="true" caseRef="Appointment.case">
+            <inputs id="_wWbNi_49" name="Patient" bindingRef="_wWbNi_8"/>
+            <inputs id="_wWbNi_51" name="Provider" bindingRef="_wWbNi_78"/>
+            <outputs id="_wWbNi_53" name="Appointment" bindingRef="_wWbNi_86"/>
+            <parameterMapping id="_wWbNi_50" name="ParameterMapping_3" sourceRef="_wWbNi_49" targetRef="_Zjy8C_6"/>
+            <parameterMapping id="_wWbNi_54" name="ParameterMapping_5" sourceRef="_Zjy8C_5" targetRef="_wWbNi_53"/>
+        </caseTask>
+        <caseTask id="ct__wWbNi_5" name="Second Appointment" description="Second&#10;Appointment" isBlocking="true" caseRef="Appointment.case">
+            <inputs id="_wWbNi_57" name="Patient" bindingRef="_wWbNi_8"/>
+            <outputs id="_wWbNi_61" name="Appointment"/>
+            <parameterMapping id="_wWbNi_58" name="ParameterMapping_6" sourceRef="_wWbNi_57" targetRef="_Zjy8C_6"/>
+            <parameterMapping id="_wWbNi_62" name="ParameterMapping_8" sourceRef="_Zjy8C_5" targetRef="_wWbNi_61"/>
+        </caseTask>
+        <caseTask id="ct__wWbNi_6" name="Plan Radiology Scan Appointment " description="Plan Radiology &#10;Scan Appointment " isBlocking="true" caseRef="Appointment.case">
+            <inputs id="_wWbNi_30" name="Patient" bindingRef="_wWbNi_8"/>
+            <inputs id="_wWbNi_68" name="Provider" bindingRef="_wWbNi_78"/>
+            <outputs id="_wWbNi_70" name="Appointment" bindingRef="_wWbNi_86"/>
+            <parameterMapping id="_wWbNi_67" name="ParameterMapping_10" sourceRef="_wWbNi_30" targetRef="_Zjy8C_6"/>
+            <parameterMapping id="_wWbNi_71" name="ParameterMapping_12" sourceRef="_Zjy8C_5" targetRef="_wWbNi_70"/>
+        </caseTask>
+        <caseTask id="ct__wWbNi_0" name="Appointment" isBlocking="true" caseRef="Appointment.case">
+            <inputs id="_wWbNi_14" name="Patient" bindingRef="_wWbNi_8"/>
+            <outputs id="_wWbNi_32" name="Appointment" bindingRef="_wWbNi_86"/>
+            <parameterMapping id="_wWbNi_16" name="ParameterMapping_2" sourceRef="_wWbNi_14" targetRef="_Zjy8C_6"/>
+            <parameterMapping id="_wWbNi_75" name="ParameterMapping_7" sourceRef="_Zjy8C_5" targetRef="_wWbNi_32"/>
+        </caseTask>
+        <milestone id="ms__wWbNi_0" name="Updated Diagnosis"/>
+        <milestone id="ms__wWbNi_1" name="Updated Care Plan"/>
+        <userEvent id="ue__wWbNi_0" name="Start AfterCare"/>
+        <userEvent id="ue__wWbNi_1" name="Cancel Treatment" description="Cancel&#10;Treatment" authorizedRoleRefs="_wWbNi_24"/>
+        <timerEvent id="tmr__wWbNi_0" name="3 months">
+            <timerExpression id="_wWbNi_65" language="spel">
+                <body>
+                    <![CDATA[P3M]]>
+                </body>
+            </timerExpression>
+            <planItemStartTrigger id="_wWbNi_55" name="PlanItemStartTrigger_0" sourceRef="pi_ct__wWbNi_4">
+                <standardEvent>complete</standardEvent>
+            </planItemStartTrigger>
+        </timerEvent>
+        <stage id="_wWbNi_0" name="Diagnosis" autoComplete="true">
+            <planItem id="pi_ct__wWbNi_0" name="Appointment" definitionRef="ct__wWbNi_0">
+                <itemControl id="_wWbNi_13" name="ItemControl_10">
+                    <repetitionRule id="_wWbNi_114" name="Constraint_3">
+                        <condition id="_wWbNi_115" name="Expression_3" language="spel">
+                            <body>
+                                <![CDATA[true]]>
+                            </body>
+                        </condition>
+                    </repetitionRule>
+                </itemControl>
+            </planItem>
+            <planItem id="pi_ht__wWbNi_3" name="Encounter" description="Encounter and&#10;Diagnosis Notes" definitionRef="ht__wWbNi_3">
+                <entryCriterion id="_wWbNi_76" name="EntryCriterion_4" sentryRef="crit__wWbNi_2"/>
+                <itemControl id="_wWbNi_12" name="ItemControl_8">
+                    <repetitionRule id="_wWbNi_116" name="Constraint_4" contextRef="_wWbNi_15">
+                        <condition id="_wWbNi_117" name="Expression_4" language="spel">
+                            <body>
+                                <![CDATA[true]]>
+                            </body>
+                        </condition>
+                    </repetitionRule>
+                </itemControl>
+            </planItem>
+            <planItem id="pi_ht__wWbNi_4" name="Observation from Multidisciplinary Team" description="Observation from&#10;Multidisciplinary Team" definitionRef="ht__wWbNi_4">
+                <itemControl id="_wWbNi_11" name="ItemControl_7">
+                    <repetitionRule id="_wWbNi_118" name="Constraint_5" contextRef="_wWbNi_15">
+                        <condition id="_wWbNi_119" name="Expression_5" language="spel">
+                            <body>
+                                <![CDATA[true]]>
+                            </body>
+                        </condition>
+                    </repetitionRule>
+                </itemControl>
+            </planItem>
+            <planItem id="pi_ht__wWbNi_7" name="Treatment Proposed" definitionRef="ht__wWbNi_7">
+                <itemControl id="_wWbNi_34" name="ItemControl_13">
+                    <repetitionRule id="_wWbNi_66" name="Constraint_10">
+                        <condition id="_wWbNi_77" name="Expression_11" language="spel">
+                            <body>
+                                <![CDATA[true]]>
+                            </body>
+                        </condition>
+                    </repetitionRule>
+                </itemControl>
+            </planItem>
+            <planItem id="pi_ms__wWbNi_0" name="Updated Diagnosis" definitionRef="ms__wWbNi_0">
+                <entryCriterion id="_wWbNi_92" name="EntryCriterion_7" sentryRef="crit__wWbNi_15"/>
+                <itemControl id="_wWbNi_10" name="ItemControl_6">
+                    <repetitionRule id="_wWbNi_102" name="Constraint_1">
+                        <condition id="_wWbNi_103" name="Expression_1" language="spel">
+                            <body>
+                                <![CDATA[true]]>
+                            </body>
+                        </condition>
+                    </repetitionRule>
+                </itemControl>
+            </planItem>
+            <sentry id="crit__wWbNi_4" name="Sentry_4">
+                <planItemOnPart id="_wWbNi_36" name="PlanItemOnPart_4" sourceRef="pi_ht__wWbNi_4">
+                    <standardEvent>complete</standardEvent>
+                </planItemOnPart>
+            </sentry>
+            <sentry id="crit__wWbNi_13" name="Sentry_13">
+                <planItemOnPart id="_wWbNi_73" name="PlanItemOnPart_14" sourceRef="pi_ht__wWbNi_4">
+                    <standardEvent>complete</standardEvent>
+                </planItemOnPart>
+            </sentry>
+            <sentry id="crit__wWbNi_12" name="Sentry_12">
+                <planItemOnPart id="_wWbNi_84" name="PlanItemOnPart_13" sourceRef="pi_ct__wWbNi_0">
+                    <standardEvent>complete</standardEvent>
+                </planItemOnPart>
+            </sentry>
+            <sentry id="crit__wWbNi_5" name="Sentry_5">
+                <planItemOnPart id="_wWbNi_98" name="PlanItemOnPart_5" sourceRef="pi_ct__wWbNi_0">
+                    <standardEvent>complete</standardEvent>
+                </planItemOnPart>
+            </sentry>
+            <sentry id="crit__wWbNi_2" name="Sentry_2">
+                <planItemOnPart id="_wWbNi_90" name="PlanItemOnPart_2" sourceRef="pi_ct__wWbNi_0">
+                    <standardEvent>complete</standardEvent>
+                </planItemOnPart>
+            </sentry>
+            <sentry id="crit__wWbNi_15" name="Sentry_15">
+                <caseFileItemOnPart id="_wWbNi_122" name="CaseFileItemOnPart_0" sourceRef="_wWbNi_15">
+                    <standardEvent>create</standardEvent>
+                </caseFileItemOnPart>
+            </sentry>
+            <planningTable id="_wWbNi_29" name="PlanningTable_0">
+                <discretionaryItem id="pi__wWbNi_18" name="Radiology Consult" definitionRef="_wWbNi_18" authorizedRoleRefs="_wWbNi_24">
+                    <itemControl id="_wWbNi_4" name="ItemControl_2">
+                        <repetitionRule id="_wWbNi_87" name="Constraint_6">
+                            <condition id="_wWbNi_88" name="Expression_6" language="spel">
+                                <body>
+                                    <![CDATA[true]]>
+                                </body>
+                            </condition>
+                        </repetitionRule>
+                    </itemControl>
+                </discretionaryItem>
+            </planningTable>
+        </stage>
+        <stage id="_wWbNi_18" name="Radiology Consult" autoComplete="true">
+            <planItem id="pi_ct__wWbNi_6" name="Plan Radiology Scan Appointment " description="Plan Radiology &#10;Scan Appointment " definitionRef="ct__wWbNi_6"/>
+            <planItem id="pi_ht__wWbNi_0" name="Radiology Scan" definitionRef="ht__wWbNi_0">
+                <entryCriterion id="_wWbNi_46" name="EntryCriterion_10" sentryRef="crit__wWbNi_3"/>
+            </planItem>
+            <planItem id="pi_ht__wWbNi_1" name="Radiologist Report" description="Radiologist&#10;Report" definitionRef="ht__wWbNi_1">
+                <entryCriterion id="_wWbNi_43" name="EntryCriterion_9" sentryRef="crit__wWbNi_1"/>
+            </planItem>
+            <sentry id="crit__wWbNi_1" name="Sentry_1">
+                <planItemOnPart id="_wWbNi_22" name="PlanItemOnPart_1" sourceRef="pi_ht__wWbNi_0">
+                    <standardEvent>complete</standardEvent>
+                </planItemOnPart>
+            </sentry>
+            <sentry id="crit__wWbNi_3" name="Sentry_3">
+                <planItemOnPart id="_wWbNi_72" name="PlanItemOnPart_12" sourceRef="pi_ct__wWbNi_6">
+                    <standardEvent>complete</standardEvent>
+                </planItemOnPart>
+            </sentry>
+        </stage>
+        <stage id="_wWbNi_45" name="Rehabilitation" autoComplete="true">
+            <planItem id="pi_ct__wWbNi_4" name="First Appointment" description="First&#10;Appointment" definitionRef="ct__wWbNi_4"/>
+            <planItem id="pi_tmr__wWbNi_0" name="3 months" definitionRef="tmr__wWbNi_0"/>
+            <planItem id="pi_ct__wWbNi_5" name="Second Appointment" description="Second&#10;Appointment" definitionRef="ct__wWbNi_5">
+                <entryCriterion id="_wWbNi_48" name="EntryCriterion_11" sentryRef="crit__wWbNi_10"/>
+            </planItem>
+            <sentry id="crit__wWbNi_10" name="Sentry_10">
+                <planItemOnPart id="_wWbNi_63" name="PlanItemOnPart_10" sourceRef="pi_tmr__wWbNi_0">
+                    <standardEvent>occur</standardEvent>
+                </planItemOnPart>
+            </sentry>
+        </stage>
+        <stage id="_wWbNi_93" name="Treatment" autoComplete="true">
+            <planItem id="pi_ht__wWbNi_2" name="Care Plan" definitionRef="ht__wWbNi_2">
+                <itemControl id="_wWbNi_17" name="ItemControl_11">
+                    <repetitionRule id="_wWbNi_109" name="Constraint_7">
+                        <condition id="_wWbNi_123" name="Expression_7" language="spel">
+                            <body>
+                                <![CDATA[true]]>
+                            </body>
+                        </condition>
+                    </repetitionRule>
+                </itemControl>
+            </planItem>
+            <planItem id="pi_ms__wWbNi_1" name="Updated Care Plan" definitionRef="ms__wWbNi_1">
+                <entryCriterion id="_wWbNi_79" name="EntryCriterion_5" sentryRef="crit__wWbNi_0"/>
+                <itemControl id="_wWbNi_21" name="ItemControl_12">
+                    <repetitionRule id="_wWbNi_124" name="Constraint_8">
+                        <condition id="_wWbNi_125" name="Expression_8" language="spel">
+                            <body>
+                                <![CDATA[true]]>
+                            </body>
+                        </condition>
+                    </repetitionRule>
+                </itemControl>
+            </planItem>
+            <sentry id="crit__wWbNi_0" name="Sentry_0">
+                <caseFileItemOnPart id="_wWbNi_97" name="CaseFileItemOnPart_1" sourceRef="_wWbNi_89">
+                    <standardEvent>create</standardEvent>
+                </caseFileItemOnPart>
+            </sentry>
+            <planningTable id="_wWbNi_108" name="PlanningTable_1">
+                <discretionaryItem id="pi_ht__wWbNi_5" name="Update Care Plan" definitionRef="ht__wWbNi_5" authorizedRoleRefs="_wWbNi_24"/>
+            </planningTable>
+        </stage>
+    </casePlanModel>
+    <caseRoles id="_wWbNi_23" name="Patient"/>
+    <caseRoles id="_wWbNi_24" name="TreatingPhysician" description="Doctor handling this case"/>
+    <caseRoles id="_wWbNi_31" name="Radiologist"/>
+    <caseRoles id="_wWbNi_138" name="Nurse"/>
+    <input id="_wWbNi_9" name="Patient" bindingRef="_wWbNi_8"/>
+</case>

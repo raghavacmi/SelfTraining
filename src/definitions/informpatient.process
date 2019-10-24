@@ -1,0 +1,5 @@
+<process name="informpatient" description="Inform Patient">
+    <extensionElements>
+        <batav:implementation xmlns:batav="io.batav" class="io.batav.cmmn.instance.process.http.HTTPCallDefinition" async="true"/>
+    </extensionElements>
+</process>

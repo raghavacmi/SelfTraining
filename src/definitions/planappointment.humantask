@@ -1,0 +1,104 @@
+<humantask>
+    <batav:implementation xmlns:batav="io.batav" name="planappointment" description="Plan Appointment" class="io.batav.cmmn.definition.task.WorkflowTaskDefinition">
+        <input id="_rGtj_Appointment" name="Appointment"/>
+        <output id="_ZItc_Appointment" name="Appointment"/>
+        <task-model>{
+	"schema": {
+		"type": "object",
+		"properties": {
+			"Appointment": {
+				"$ref": "#/definitions/Appointment"
+			}
+		},
+		"definitions": {
+			"Appointment": {
+				"title": "Appointment Details",
+				"description": "Please fill details",
+				"type": "object",
+				"properties": {
+					"AppointmentID": {
+						"type": "string",
+						"title": "Appointment ID",
+						"default": "App-ID"
+					},
+					"Status": {
+						"type": "string",
+						"title": "Status",
+						"default": "Status"
+					},
+					"ServiceType": {
+						"type": "string",
+						"title": "Service Type",
+						"default": "Service Type"
+					},
+					"Specialty": {
+						"type": "string",
+						"title": "Specialty",
+						"default": "Radiology"
+					},
+					"AppointmentType": {
+						"type": "string",
+						"title": "AppointmentType",
+						"default": "AppointmentType"
+					},
+					"ReasonCode": {
+						"type": "string",
+						"title": "Reason Code",
+						"default": "ReasonCode"
+					},
+					"StartDate": {
+						"title": "Start date",
+						"type": "string",
+						"format": "date"
+					},
+					"StartTime": {
+						"title": "Start time",
+						"type": "string",
+						"format": "time"
+					},
+					"EndDate": {
+						"title": "End date",
+						"type": "string",
+						"format": "date"
+					},
+					"EndTime": {
+						"title": "End time",
+						"type": "string",
+						"format": "time"
+					},
+					"CreatedBy": {
+						"type": "string",
+						"title": "CreatedBy"
+					},
+					"Comment": {
+						"type": "string",
+						"title": "Comment"
+					}
+				}
+			}
+		}
+	},
+	"uiSchema": {
+		"Appointment": {
+			"Comment": {
+				"ui:widget": "textarea"
+			},
+			"ui:order": [
+				"AppointmentID",
+				"Status",
+				"ServiceType",
+				"Specialty",
+				"AppointmentType",
+				"ReasonCode",
+				"StartDate",
+				"StartTime",
+				"EndDate",
+				"EndTime",
+				"CreatedBy",
+				"Comment"
+			]
+		}
+	}
+}</task-model>
+    </batav:implementation>
+</humantask>

@@ -1,0 +1,7 @@
+<caseFileItemDefinition name="treatmentproposal" definitionType="http://www.omg.org/spec/CMMN/DefinitionType/Unspecified">
+    <property name="SurgeryRequired" type="http://www.omg.org/spec/CMMN/PropertyType/boolean"/>
+    <property name="RadiotherapyRequired" type="http://www.omg.org/spec/CMMN/PropertyType/boolean"/>
+    <property name="Description" type="http://www.omg.org/spec/CMMN/PropertyType/string"/>
+    <property name="Notes" type="http://www.omg.org/spec/CMMN/PropertyType/string"/>
+    <property name="MedicalManagement" type="http://www.omg.org/spec/CMMN/PropertyType/string"/>
+</caseFileItemDefinition>

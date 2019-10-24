@@ -1,0 +1,14 @@
+<caseFileItemDefinition name="appointment" definitionType="http://www.omg.org/spec/CMMN/DefinitionType/Unspecified">
+    <property name="AppointmentID" type="http://www.omg.org/spec/CMMN/PropertyType/string"/>
+    <property name="Status" type="http://www.omg.org/spec/CMMN/PropertyType/string"/>
+    <property name="ServiceType" type="http://www.omg.org/spec/CMMN/PropertyType/string"/>
+    <property name="Specialty" type="http://www.omg.org/spec/CMMN/PropertyType/string"/>
+    <property name="AppointmentType" type="http://www.omg.org/spec/CMMN/PropertyType/string"/>
+    <property name="ReasonCode" type="http://www.omg.org/spec/CMMN/PropertyType/string"/>
+    <property name="StartDate" type="http://www.omg.org/spec/CMMN/PropertyType/date"/>
+    <property name="StartTime" type="http://www.omg.org/spec/CMMN/PropertyType/time"/>
+    <property name="EndDate" type="http://www.omg.org/spec/CMMN/PropertyType/date"/>
+    <property name="EndTime" type="http://www.omg.org/spec/CMMN/PropertyType/time"/>
+    <property name="CreatedBy" type="http://www.omg.org/spec/CMMN/PropertyType/string"/>
+    <property name="Comment" type="http://www.omg.org/spec/CMMN/PropertyType/string"/>
+</caseFileItemDefinition>

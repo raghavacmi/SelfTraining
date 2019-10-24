@@ -1,0 +1,6 @@
+<caseFileItemDefinition name="encounter" definitionType="http://www.omg.org/spec/CMMN/DefinitionType/Unspecified">
+    <property name="Status" type="http://www.omg.org/spec/CMMN/PropertyType/string"/>
+    <property name="Subject" type="http://www.omg.org/spec/CMMN/PropertyType/string"/>
+    <property name="ServiceProvider" type="http://www.omg.org/spec/CMMN/PropertyType/string"/>
+    <property name="Notes" type="http://www.omg.org/spec/CMMN/PropertyType/string"/>
+</caseFileItemDefinition>

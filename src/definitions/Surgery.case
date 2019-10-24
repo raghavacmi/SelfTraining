@@ -1,0 +1,154 @@
+<case id="Surgery.case" name="Surgery" guid="_uzkt7">
+    <caseFileModel>
+        <caseFileItem id="_cgn2A_0" name="Patient" multiplicity="ExactlyOne" definitionRef="patient.cfid"/>
+        <caseFileItem id="_uzkt7_9" name="Appointment" multiplicity="ExactlyOne" definitionRef="appointment.cfid"/>
+        <caseFileItem id="_uzkt7_7" name="StudyMaterial" multiplicity="ExactlyOne" definitionRef="studymaterial.cfid"/>
+        <caseFileItem id="_uzkt7_20" name="Notes" multiplicity="ExactlyOne" definitionRef="notes.cfid"/>
+    </caseFileModel>
+    <casePlanModel id="cm__cgn2A_0" name="Surgery" autoComplete="true">
+        <planItem id="pi_ht__cgn2A_0" name="Provide Educational Material to Patient" description="Provide Educational &#10;Material to Patient" definitionRef="ht__cgn2A_0"/>
+        <planItem id="pi_ht__cgn2A_1" name="Prepare Surgery" definitionRef="ht__cgn2A_1"/>
+        <planItem id="pi_ct__cgn2A_1" name="Plan Healthcheck" definitionRef="ct__cgn2A_1"/>
+        <planItem id="pi_ct__cgn2A_0" name="Plan Surgery" definitionRef="ct__cgn2A_0"/>
+        <planItem id="pi_ht__cgn2A_3" name="Perform Surgery" definitionRef="ht__cgn2A_3">
+            <entryCriterion id="_cgn2A_1" name="EntryCriterion_0" sentryRef="crit__cgn2A_1"/>
+        </planItem>
+        <planItem id="pi_ue__uzkt7_0" name="Cancel Surgery" definitionRef="ue__uzkt7_0"/>
+        <sentry id="crit__cgn2A_1" name="Sentry_1">
+            <planItemOnPart id="_cgn2A_23" name="PlanItemOnPart_1" sourceRef="pi_ct__cgn2A_0">
+                <standardEvent>complete</standardEvent>
+            </planItemOnPart>
+        </sentry>
+        <sentry id="crit__uzkt7_0" name="Sentry_0">
+            <planItemOnPart id="_uzkt7_10" name="PlanItemOnPart_0" sourceRef="pi_ue__uzkt7_0">
+                <standardEvent>occur</standardEvent>
+            </planItemOnPart>
+        </sentry>
+        <planningTable id="_cgn2A_19" name="PlanningTable_0">
+            <discretionaryItem id="pi_ht__cgn2A_2" name="Plan Extra Intervention" definitionRef="ht__cgn2A_2" authorizedRoleRefs="_cgn2A_20"/>
+        </planningTable>
+        <exitCriterion id="_uzkt7_0" name="ExitCriterion_0" sentryRef="crit__uzkt7_0"/>
+        <humanTask id="ht__cgn2A_0" name="Provide Educational Material to Patient" description="Provide Educational &#10;Material to Patient" isBlocking="true">
+            <inputs id="_uzkt7_11" name="StudyMaterial" bindingRef="_uzkt7_7"/>
+            <outputs id="_uzkt7_13" name="StudyMaterial" bindingRef="_uzkt7_7"/>
+            <extensionElements mustUnderstand="false">
+                <batav:implementation xmlns:batav="io.batav" humanTaskRef="studymaterial.humantask">
+                    <parameterMapping id="_uzkt7_12" name="ParameterMapping_1" sourceRef="_uzkt7_11" targetRef="_FKzg_StudyMaterial"/>
+                    <parameterMapping id="_uzkt7_14" name="ParameterMapping_4" sourceRef="_Uvyt_StudyMaterial" targetRef="_uzkt7_13"/>
+                </batav:implementation>
+            </extensionElements>
+        </humanTask>
+        <humanTask id="ht__cgn2A_1" name="Prepare Surgery" isBlocking="true">
+            <inputs id="_uzkt7_27" name="Notes" bindingRef="_uzkt7_20"/>
+            <outputs id="_uzkt7_29" name="Notes" bindingRef="_uzkt7_20"/>
+            <extensionElements mustUnderstand="false">
+                <batav:implementation xmlns:batav="io.batav" humanTaskRef="NotesHT.humantask">
+                    <parameterMapping id="_uzkt7_28" name="ParameterMapping_13" sourceRef="_uzkt7_27" targetRef="_js9D_Notes"/>
+                    <parameterMapping id="_uzkt7_30" name="ParameterMapping_14" sourceRef="_L3ka_Notes" targetRef="_uzkt7_29"/>
+                </batav:implementation>
+            </extensionElements>
+        </humanTask>
+        <humanTask id="ht__cgn2A_2" name="Plan Extra Intervention" isBlocking="true">
+            <inputs id="_uzkt7_22" name="Notes" bindingRef="_uzkt7_20"/>
+            <outputs id="_uzkt7_24" name="Notes" bindingRef="_uzkt7_20"/>
+            <extensionElements mustUnderstand="false">
+                <batav:implementation xmlns:batav="io.batav" humanTaskRef="NotesHT.humantask">
+                    <parameterMapping id="_uzkt7_23" name="ParameterMapping_10" sourceRef="_uzkt7_22" targetRef="_js9D_Notes"/>
+                    <parameterMapping id="_uzkt7_25" name="ParameterMapping_11" sourceRef="_L3ka_Notes" targetRef="_uzkt7_24"/>
+                </batav:implementation>
+            </extensionElements>
+        </humanTask>
+        <humanTask id="ht__cgn2A_3" name="Perform Surgery" isBlocking="true">
+            <inputs id="_uzkt7_16" name="Notes" bindingRef="_uzkt7_20"/>
+            <outputs id="_uzkt7_18" name="Notes" bindingRef="_uzkt7_20"/>
+            <extensionElements mustUnderstand="false">
+                <batav:implementation xmlns:batav="io.batav" humanTaskRef="NotesHT.humantask">
+                    <parameterMapping id="_uzkt7_17" name="ParameterMapping_7" sourceRef="_uzkt7_16" targetRef="_js9D_Notes"/>
+                    <parameterMapping id="_uzkt7_19" name="ParameterMapping_8" sourceRef="_L3ka_Notes" targetRef="_uzkt7_18"/>
+                </batav:implementation>
+            </extensionElements>
+        </humanTask>
+        <caseTask id="ct__cgn2A_0" name="Plan Surgery" isBlocking="true" caseRef="Appointment.case">
+            <inputs id="_cgn2A_3" name="Patient" bindingRef="_cgn2A_0"/>
+            <outputs id="_cgn2A_7" name="Appointment" bindingRef="_uzkt7_9"/>
+            <parameterMapping id="_cgn2A_4" name="ParameterMapping_0" sourceRef="_cgn2A_3" targetRef="_Zjy8C_6"/>
+            <parameterMapping id="_cgn2A_8" name="ParameterMapping_2" sourceRef="_Zjy8C_5" targetRef="_cgn2A_7"/>
+        </caseTask>
+        <caseTask id="ct__cgn2A_1" name="Plan Healthcheck" isBlocking="true" caseRef="Appointment.case">
+            <inputs id="_cgn2A_10" name="Patient" bindingRef="_cgn2A_0"/>
+            <outputs id="_cgn2A_14" name="Appointment" bindingRef="_uzkt7_9"/>
+            <parameterMapping id="_cgn2A_11" name="ParameterMapping_3" sourceRef="_cgn2A_10" targetRef="_Zjy8C_6"/>
+            <parameterMapping id="_cgn2A_15" name="ParameterMapping_5" sourceRef="_Zjy8C_5" targetRef="_cgn2A_14"/>
+        </caseTask>
+        <userEvent id="ue__uzkt7_0" name="Cancel Surgery" authorizedRoleRefs="_cgn2A_20 _cgn2A_21"/>
+    </casePlanModel>
+    <caseRoles id="_cgn2A_20" name="Surgeon"/>
+    <caseRoles id="_cgn2A_21" name="Patient"/>
+    <input id="_uzkt7_6" name="Patient" bindingRef="_cgn2A_0"/>
+    <extensionElements mustUnderstand="false">
+        <batav:start-case-model xmlns:batav="io.batav">{
+	"schema": {
+		"type": "object",
+		"properties": {
+			"Patient": {
+				"$ref": "#/definitions/Patient"
+			}
+		},
+		"definitions": {
+			"Patient": {
+				"title": "Patient Details",
+				"description": "Please fill details",
+				"type": "object",
+				"required": [
+					"ID",
+					"Name"
+				],
+				"properties": {
+					"Name": {
+						"type": "string",
+						"title": "Name",
+						"default": "Name"
+					},
+					"Gender": {
+						"type": "string",
+						"title": "Gender"
+					},
+					"DateOfBirth": {
+						"type": "string",
+						"format": "date",
+						"title": "Date of Birth"
+					},
+					"Address": {
+						"type":"string",
+						"title": "Address"
+					},
+					"ID": {
+						"type": "string",
+						"title": "PatientID",
+						"default": "ID"
+					},
+					"Active": {
+						"type": "boolean",
+						"title": "Active"
+					},
+					"Telecom": {
+						"type": "string",
+						"title": "Telecom",
+						"minLength": 10
+					},
+					"Email": {
+						"type": "string",
+						"title": "Email"
+					}
+				}
+			}
+		}
+	},
+	"uiSchema": {
+		"Address": {
+			"ui:widget": "textarea"
+		}
+	}
+}</batav:start-case-model>
+    </extensionElements>
+</case>

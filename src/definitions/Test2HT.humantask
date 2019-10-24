@@ -1,0 +1,30 @@
+<humantask>
+    <batav:implementation xmlns:batav="io.batav" name="Test2HT" description="Test2 HumanTask" class="io.batav.cmmn.definition.task.WorkflowTaskDefinition">
+        <input id="_OF9e_Diagnosis" name="Test"/>
+        <output id="_HodB_Diagnosis" name="Test"/>
+        <task-model>{
+	"schema": {
+		"type": "object",
+		"properties": {
+			"Test": {
+				"$ref": "#/definitions/Test"
+			}
+		},
+		"definitions": {
+			"Test": {
+				"title": "Test Details",
+				"description": "Please fill details",
+				"type": "object",
+				"properties": {
+					"Name": {
+						"type": "string",
+						"title": "Name",
+						"default": "Name"
+					}
+				}
+			}
+		}
+	}
+}</task-model>
+    </batav:implementation>
+</humantask>

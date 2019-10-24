@@ -1,0 +1,102 @@
+<humantask>
+    <batav:implementation xmlns:batav="io.batav" name="informpractitioner" description="Inform Practitioner" class="io.batav.cmmn.definition.task.WorkflowTaskDefinition">
+        <input id="_AO4j_Patient" name="Patient"/>
+        <output id="_Ni6u_Status" name="Status"/>
+        <input id="_Yvc6_Appoinment" name="Appoinment"/>
+        <task-model>
+{
+  "schema": {
+      "type": "object",
+      "properties": {"AppointmentDetails": {"$ref": "#/definitions/AppointmentDetails"}},
+      "definitions": {
+          "AppointmentDetails": {
+              "type": "object",
+              "properties": {
+                  "Patient": {"$ref": "#/definitions/Patient"},
+                  "Appointment": {"$ref": "#/definitions/Appointment"}
+              }
+          },
+          "Patient": {
+				"title": "Patient Details",
+				"description": "Please fill details",
+				"type": "object",
+				"required": [
+					"PatientID",
+					"Name"
+				],
+				"properties": {
+					"Name": {
+						"type": "string",
+						"title": "Name",
+						"default": "Name"
+					},
+					"Gender": {
+						"type": "string",
+						"title": "Gender"
+					},
+					"DateOfBirth": {
+						"type": "string",
+						"format": "date"
+					},
+					"Address": {
+						"type":"string",
+						"title": "Address"
+					},
+					"PatientID": {
+						"type": "string",
+						"title": "PatientID",
+						"default": "ID"
+					},
+					"Active": {
+						"type": "boolean",
+						"title": "Active"
+					},
+					"telephone": {
+						"type": "string",
+						"title": "Telephone",
+						"minLength": 10
+					},
+					"Email": {
+						"type": "string",
+						"title": "Email"
+					}
+				}
+			},
+          "Appointment": {
+				"title": "Appointment Details",
+				"description": "Please fill details",
+				"type": "object",
+				"properties": {
+					"AppointmentType": {
+						"type": "string",
+						"title": "AppointmentType",
+						"default": "AppointmentType"
+					},
+					"StartDate": {
+						"type": "string",
+						"format": "date",
+						"title": "Appointment Date"
+					},
+					"Slot": {
+                      "title": "Start time",
+                      "type": "string",
+                      "format": "time"
+                  },
+					"Comment": {
+						"type":"string",
+						"title": "Comment"
+					}
+				}
+			}
+      }
+  },
+  "uiSchema": {
+    "AppointmentDetails": {
+      "ui:widget": "stepper",
+      "ui:order": ["Patient", "Appointment"]
+      }
+  }
+}
+		</task-model>
+    </batav:implementation>
+</humantask>

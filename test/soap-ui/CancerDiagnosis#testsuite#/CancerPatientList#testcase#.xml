@@ -1,0 +1,1560 @@
+<con:testCase failOnError="true" failTestCaseOnErrors="true" id="6e7a07d2-14aa-4d62-9f31-4c57ecf9a323" keepSession="false" maxResults="0" name="CancerPatientList" searchProperties="true" xmlns:con="http://eviware.com/soapui/config">
+  <con:settings/>
+  <con:testStep id="0eea25b4-9453-408c-ad9f-6ea9f2cf9d66" name="User information setup" type="groovy">
+    <con:settings/>
+    <con:config>
+      <script>// set the property at the test suite level if needed in multiple testcases
+testRunner.testCase.setPropertyValue("context", "Demo-Hospital")
+
+testRunner.testCase.setPropertyValue("AdminName", "admin")
+testRunner.testCase.setPropertyValue("AdminPwd", "admin")
+
+// Roles 
+testRunner.testCase.setPropertyValue("TP_Role", "TreatingPhysician")
+testRunner.testCase.setPropertyValue("Radio_Role", "Radiologist")
+testRunner.testCase.setPropertyValue("Nurse_Role", "Nurse")
+testRunner.testCase.setPropertyValue("Surgeon_Role", "Surgeon")
+testRunner.testCase.setPropertyValue("Patient_Role", "Patient")
+
+// User creations
+testRunner.testCase.setPropertyValue("Oncology_HOD", "Oncology_HOD")
+testRunner.testCase.setPropertyValue("Oncology_HODName", testRunner.testCase.getPropertyValue("Oncology_HOD"))
+testRunner.testCase.setPropertyValue("Oncology_HODPwd", testRunner.testCase.getPropertyValue("Oncology_HOD"))
+testRunner.testCase.setPropertyValue("Oncology_HODEmail", testRunner.testCase.getPropertyValue("Oncology_HOD") + "@hospital.com")
+
+testRunner.testCase.setPropertyValue("Doctor", "Doctor")
+testRunner.testCase.setPropertyValue("DoctorName", testRunner.testCase.getPropertyValue("Doctor"))
+testRunner.testCase.setPropertyValue("DoctorPwd", testRunner.testCase.getPropertyValue("Doctor"))
+testRunner.testCase.setPropertyValue("DoctorEmail", testRunner.testCase.getPropertyValue("Doctor") + "@hospital.com")
+
+
+testRunner.testCase.setPropertyValue("Patient", "patient")
+testRunner.testCase.setPropertyValue("PatientName", testRunner.testCase.getPropertyValue("Patient"))
+testRunner.testCase.setPropertyValue("PatientPwd", testRunner.testCase.getPropertyValue("Patient"))
+testRunner.testCase.setPropertyValue("PatientEmail", testRunner.testCase.getPropertyValue("Patient") + "@hospital.com")
+
+
+testRunner.testCase.setPropertyValue("TreatingPhysician", "TreatingPhysician")
+testRunner.testCase.setPropertyValue("TreatingPhysicianName", testRunner.testCase.getPropertyValue("TreatingPhysician"))
+testRunner.testCase.setPropertyValue("TreatingPhysicianPwd", testRunner.testCase.getPropertyValue("TreatingPhysician"))
+testRunner.testCase.setPropertyValue("TreatingPhysicianEmail", testRunner.testCase.getPropertyValue("TreatingPhysician") + "@demohospital.com")
+
+
+testRunner.testCase.setPropertyValue("Radiologist", "Radiologist")
+testRunner.testCase.setPropertyValue("RadiologistName", testRunner.testCase.getPropertyValue("Radiologist"))
+testRunner.testCase.setPropertyValue("RadiologistPwd", testRunner.testCase.getPropertyValue("Radiologist"))
+testRunner.testCase.setPropertyValue("RadiologistEmail", testRunner.testCase.getPropertyValue("Radiologist") + "@demohospital.com")
+
+testRunner.testCase.setPropertyValue("Nurse", "Nurse")
+testRunner.testCase.setPropertyValue("NurseName", testRunner.testCase.getPropertyValue("Nurse"))
+testRunner.testCase.setPropertyValue("NursePwd", testRunner.testCase.getPropertyValue("Nurse"))
+testRunner.testCase.setPropertyValue("NurseEmail", testRunner.testCase.getPropertyValue("Nurse") + "@demohospital.com")
+
+testRunner.testCase.setPropertyValue("Surgeon", "Surgeon")
+testRunner.testCase.setPropertyValue("SurgeonName", testRunner.testCase.getPropertyValue("Surgeon"))
+testRunner.testCase.setPropertyValue("SurgeonPwd", testRunner.testCase.getPropertyValue("Surgeon"))
+testRunner.testCase.setPropertyValue("SurgeonEmail", testRunner.testCase.getPropertyValue("Surgeon") + "@demohospital.com")
+
+// Test data variables
+
+testRunner.testCase.setPropertyValue("User1", "Lanie Lavallee")
+testRunner.testCase.setPropertyValue("User2", "Elana Cabiness")
+testRunner.testCase.setPropertyValue("User3", "Gilberto Batty")
+testRunner.testCase.setPropertyValue("User4", "Lynwood Francis")
+testRunner.testCase.setPropertyValue("User5", "Roxane Mouton")
+testRunner.testCase.setPropertyValue("User6", "Tommy Chong")
+testRunner.testCase.setPropertyValue("User7", "Duane Holte")
+testRunner.testCase.setPropertyValue("User8", "Dan Thorman")
+testRunner.testCase.setPropertyValue("User9", "Sharon Osbourne")
+testRunner.testCase.setPropertyValue("User10", "Nick Bewley")
+testRunner.testCase.setPropertyValue("User11", "Hiram Caudle")
+testRunner.testCase.setPropertyValue("User12", "Shaunda Connor")
+
+testRunner.testCase.setPropertyValue("Gender_M", "Male")
+testRunner.testCase.setPropertyValue("Gender_FM", "Female")
+
+testRunner.testCase.setPropertyValue("User1_DB", "1944-10-25")
+testRunner.testCase.setPropertyValue("User2_DB", "1978-01-15")
+testRunner.testCase.setPropertyValue("User3_DB", "1944-04-16")
+testRunner.testCase.setPropertyValue("User4_DB", "1964-05-19")
+testRunner.testCase.setPropertyValue("User5_DB", "1991-10-30")
+testRunner.testCase.setPropertyValue("User6_DB", "1994-10-10")
+testRunner.testCase.setPropertyValue("User7_DB", "1944-12-11")
+testRunner.testCase.setPropertyValue("User8_DB", "1984-08-12")
+testRunner.testCase.setPropertyValue("User9_DB", "1957-03-18")
+testRunner.testCase.setPropertyValue("User10_DB", "1989-11-22")
+
+
+testRunner.testCase.setPropertyValue("User1_AD", "943 S. Leatherwood Ave. Sarasota, FL 34231")
+testRunner.testCase.setPropertyValue("User2_AD", "8797 Willow Dr. Champaign, IL 61821")
+testRunner.testCase.setPropertyValue("User3_AD", "687 Squaw Creek Apopka, FL 32703")
+testRunner.testCase.setPropertyValue("User4_AD", "236 Foster Court Muskogee, OK 74403")
+testRunner.testCase.setPropertyValue("User5_AD", "205 Cherry Hill Ave Huntington Station, NY 11746")
+testRunner.testCase.setPropertyValue("User6_AD", "78 Augusta Dr.Dorchester Center, MA 02124")
+testRunner.testCase.setPropertyValue("User7_AD", "58 Kingston Road Petersburg, VA 23803")
+testRunner.testCase.setPropertyValue("User8_AD", "69 North Fulton Street Johnson City, TN 37601")
+testRunner.testCase.setPropertyValue("User9_AD", "975 Griffin Road Milton, MA 02186")
+testRunner.testCase.setPropertyValue("User10_AD", "987 Madison St. Norristown, PA 19401")
+
+
+testRunner.testCase.setPropertyValue("User1_ID", "ID-012345")
+testRunner.testCase.setPropertyValue("User2_ID", "ID-562345")
+testRunner.testCase.setPropertyValue("User3_ID", "ID-635984")
+testRunner.testCase.setPropertyValue("User4_ID", "ID-635984")
+testRunner.testCase.setPropertyValue("User5_ID", "ID-598684")
+testRunner.testCase.setPropertyValue("User6_ID", "ID-111184")
+testRunner.testCase.setPropertyValue("User7_ID", "ID-789184")
+testRunner.testCase.setPropertyValue("User8_ID", "ID-025464")
+testRunner.testCase.setPropertyValue("User9_ID", "ID-546884")
+testRunner.testCase.setPropertyValue("User10_ID", "ID-954645")
+
+testRunner.testCase.setPropertyValue("User1_TL", "98765432116")
+testRunner.testCase.setPropertyValue("User2_TL", "87654321986")
+testRunner.testCase.setPropertyValue("User3_TL", "76543219876")
+testRunner.testCase.setPropertyValue("User4_TL", "65432198765")
+testRunner.testCase.setPropertyValue("User5_TL", "54321987654")
+testRunner.testCase.setPropertyValue("User6_TL", "32198765432")
+testRunner.testCase.setPropertyValue("User7_TL", "74123658965")
+testRunner.testCase.setPropertyValue("User8_TL", "85632147895")
+testRunner.testCase.setPropertyValue("User9_TL", "85213456798")
+testRunner.testCase.setPropertyValue("User10_TL", "965485678545")
+
+testRunner.testCase.setPropertyValue("User1_EM", "Lanie_Lavallee@testmail.com")
+testRunner.testCase.setPropertyValue("User2_EM", "Elana_Cabiness@testmail.com")
+testRunner.testCase.setPropertyValue("User3_EM", "Gilberto_Batty@testmail.com")
+testRunner.testCase.setPropertyValue("User4_EM", "Lynwood_Francis@testmail.com")
+testRunner.testCase.setPropertyValue("User5_EM", "Roxane_Mouton@testmail.com")
+testRunner.testCase.setPropertyValue("User6_EM", "Tommy_Chong@testmail.com")
+testRunner.testCase.setPropertyValue("User7_EM", "Duane_Holte@testmail.com")
+testRunner.testCase.setPropertyValue("User8_EM", "Dan_Thorman@testmail.com")
+testRunner.testCase.setPropertyValue("User9_EM", "Sharon_Osbourne@testmail.com")
+testRunner.testCase.setPropertyValue("User10_EM", "Nick_Bewley@testmail.com")
+
+
+testRunner.testCase.setPropertyValue("User1_PH", "assets/Lanie_Lavallee.jpg")
+testRunner.testCase.setPropertyValue("User2_PH", "assets/Elana_Cabiness.jpg")
+testRunner.testCase.setPropertyValue("User3_PH", "assets/Gilberto_Batty.jpg")
+testRunner.testCase.setPropertyValue("User4_PH", "assets/Lynwood_Francis.jpg")
+testRunner.testCase.setPropertyValue("User5_PH", "assets/Roxane_Mouton.jpg")
+testRunner.testCase.setPropertyValue("User6_PH", "assets/Tommy_Chong.jpg")
+testRunner.testCase.setPropertyValue("User7_PH", "assets/Duane_Holte.jpg")
+testRunner.testCase.setPropertyValue("User8_PH", "assets/Dan_Thorman.jpg")
+testRunner.testCase.setPropertyValue("User9_PH", "assets/Sharon_Osbourne.jpg")
+testRunner.testCase.setPropertyValue("User10_PH", "assets/Nick_Bewley.jpg")</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep id="f225c28c-8ac4-46d5-9124-3d0add4ec1c0" name="Login Admin" type="restrequest">
+    <con:settings/>
+    <con:config methodName="login" resourcePath="/identity/login" service="http://localhost:2027" xsi:type="con:RestRequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <con:restRequest id="04a9bd3b-a23b-4080-b8bc-7d29d9f3440e" mediaType="application/json" name="Login Admin" postQueryString="false">
+        <con:settings>
+          <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting>
+        </con:settings>
+        <con:endpoint>http://localhost:2027</con:endpoint>
+        <con:request>{
+  "username" : "${#TestCase#AdminName}",
+  "password" : "${#TestCase#AdminPwd}",
+  "context" : ""
+}</con:request>
+        <con:originalUri>http://localhost/identity/login</con:originalUri>
+        <con:assertion id="494493de-ec41-4bfe-a738-eb7cd5c64e1f" name="Valid HTTP Status Codes" type="Valid HTTP Status Codes">
+          <con:configuration>
+            <codes>204</codes>
+          </con:configuration>
+        </con:assertion>
+        <con:credentials>
+          <con:authType>No Authorization</con:authType>
+        </con:credentials>
+        <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+        <con:jmsPropertyConfig/>
+        <con:parameters>
+          <entry key="login" value="" xmlns="http://eviware.com/soapui/config"/>
+        </con:parameters>
+        <con:parameterOrder>
+          <con:entry>login</con:entry>
+        </con:parameterOrder>
+      </con:restRequest>
+    </con:config>
+  </con:testStep>
+  <con:testStep id="3edc933a-a2a2-4ee6-b06e-333e3eb82546" name="get header from login response" type="groovy">
+    <con:settings/>
+    <con:config>
+      <script>// get the header from the previous test step.
+def previousStep = testRunner.testCase.getTestStepAt(context.getCurrentStepIndex()-1).getLabel()
+log.info("Trying to get JWT token from test step: " + previousStep)
+
+def headerValue = testRunner.testCase.getTestStepByName(previousStep).httpRequest.response.responseHeaders["BATAV-JWT-TOKEN"].get(0)
+
+// log the value
+log.info("headerValue: " + headerValue)
+
+
+// set the property at the test suite level if needed in multiple testcases
+testRunner.testCase.setPropertyValue("authHeader", headerValue.toString())</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep id="4c9f3dda-c8ff-413d-b78a-159e13b055d2" name="Add Doctor" type="restrequest">
+    <con:settings/>
+    <con:config methodName="Add User" resourcePath="/users" service="http://localhost:2027" xsi:type="con:RestRequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <con:restRequest id="4cd3c879-5324-4baa-8d28-1e71eb6fb877" mediaType="application/json" name="Add Doctor" postQueryString="false">
+        <con:settings>
+          <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;entry key="BATAV-JWT-TOKEN" value="${#TestCase#authHeader}" xmlns="http://eviware.com/soapui/config"/></con:setting>
+        </con:settings>
+        <con:encoding>UTF-8</con:encoding>
+        <con:endpoint>http://localhost:2027</con:endpoint>
+        <con:request>{
+  "username": "${#TestCase#DoctorName}",
+  "context" : "${#TestCase#context}",
+  "password": "${#TestCase#DoctorPwd}",
+  "name": "${#TestCase#DoctorName}",
+  "email" : "${#TestCase#DoctorEmail}",
+  "roles": [ 
+    "${#TestCase#TP_Role}",
+	"${#TestCase#Radio_Role}",
+	"${#TestCase#Nurse_Role}",
+	"${#TestCase#Surgeon}"
+	]
+}</con:request>
+        <con:originalUri>http://localhost/users</con:originalUri>
+        <con:assertion id="dde52a92-6cf3-4e03-b1df-0f341e4884dc" name="Valid HTTP Status Codes" type="Valid HTTP Status Codes">
+          <con:configuration>
+            <codes>201, 409</codes>
+          </con:configuration>
+        </con:assertion>
+        <con:credentials>
+          <con:authType>No Authorization</con:authType>
+        </con:credentials>
+        <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+        <con:jmsPropertyConfig/>
+        <con:parameters>
+          <entry key="BATAV-JWT-TOKEN" value="${#TestCase#authHeader}" xmlns="http://eviware.com/soapui/config"/>
+        </con:parameters>
+        <con:parameterOrder>
+          <con:entry>BATAV-JWT-TOKEN</con:entry>
+        </con:parameterOrder>
+      </con:restRequest>
+    </con:config>
+  </con:testStep>
+  <con:testStep id="1ee79e40-03a2-47b8-94ea-d2b9a0af23e9" name="Add Oncology_HOD" type="restrequest">
+    <con:settings/>
+    <con:config methodName="Add User" resourcePath="/users" service="http://localhost:2027" xsi:type="con:RestRequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <con:restRequest id="4cd3c879-5324-4baa-8d28-1e71eb6fb877" mediaType="application/json" name="Add Oncology_HOD" postQueryString="false">
+        <con:settings>
+          <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;entry key="BATAV-JWT-TOKEN" value="${#TestCase#authHeader}" xmlns="http://eviware.com/soapui/config"/></con:setting>
+        </con:settings>
+        <con:encoding>UTF-8</con:encoding>
+        <con:endpoint>http://localhost:2027</con:endpoint>
+        <con:request>{
+  "username": "${#TestCase#Oncology_HODName}",
+  "context" : "${#TestCase#context}",
+  "password": "${#TestCase#Oncology_HODPwd}",
+  "name": "${#TestCase#Oncology_HODName}",
+  "email" : "${#TestCase#Oncology_HODEmail}",
+  "roles": [ 
+    "${#TestCase#TP_Role}",
+	"${#TestCase#Radio_Role}",
+	"${#TestCase#Nurse_Role}",
+	"${#TestCase#Surgeon_Role}"
+	]
+}</con:request>
+        <con:originalUri>http://localhost/users</con:originalUri>
+        <con:assertion id="dde52a92-6cf3-4e03-b1df-0f341e4884dc" name="Valid HTTP Status Codes" type="Valid HTTP Status Codes">
+          <con:configuration>
+            <codes>201, 409</codes>
+          </con:configuration>
+        </con:assertion>
+        <con:credentials>
+          <con:authType>No Authorization</con:authType>
+        </con:credentials>
+        <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+        <con:jmsPropertyConfig/>
+        <con:parameters>
+          <entry key="BATAV-JWT-TOKEN" value="${#TestCase#authHeader}" xmlns="http://eviware.com/soapui/config"/>
+        </con:parameters>
+        <con:parameterOrder>
+          <con:entry>BATAV-JWT-TOKEN</con:entry>
+        </con:parameterOrder>
+      </con:restRequest>
+    </con:config>
+  </con:testStep>
+  <con:testStep id="6428e227-58cf-4999-b6e8-62eb82877c99" name="Add TreatingPhysician" type="restrequest">
+    <con:settings/>
+    <con:config methodName="Add User" resourcePath="/users" service="http://localhost:2027" xsi:type="con:RestRequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <con:restRequest id="4cd3c879-5324-4baa-8d28-1e71eb6fb877" mediaType="application/json" name="Add TreatingPhysician" postQueryString="false">
+        <con:settings>
+          <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;entry key="BATAV-JWT-TOKEN" value="${#TestCase#authHeader}" xmlns="http://eviware.com/soapui/config"/></con:setting>
+        </con:settings>
+        <con:encoding>UTF-8</con:encoding>
+        <con:endpoint>http://localhost:2027</con:endpoint>
+        <con:request>{
+  "username": "${#TestCase#TreatingPhysicianName}",
+  "context" : "${#TestCase#context}",
+  "password": "${#TestCase#TreatingPhysicianPwd}",
+  "name": "${#TestCase#TreatingPhysicianName}",
+  "email" : "${#TestCase#TreatingPhysicianEmail}",
+  "roles": [ 
+    "${#TestCase#TP_Role}",
+	"${#TestCase#Radio_Role}"
+	]
+}</con:request>
+        <con:originalUri>http://localhost/users</con:originalUri>
+        <con:assertion id="dde52a92-6cf3-4e03-b1df-0f341e4884dc" name="Valid HTTP Status Codes" type="Valid HTTP Status Codes">
+          <con:configuration>
+            <codes>201, 409</codes>
+          </con:configuration>
+        </con:assertion>
+        <con:credentials>
+          <con:authType>No Authorization</con:authType>
+        </con:credentials>
+        <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+        <con:jmsPropertyConfig/>
+        <con:parameters>
+          <entry key="BATAV-JWT-TOKEN" value="${#TestCase#authHeader}" xmlns="http://eviware.com/soapui/config"/>
+        </con:parameters>
+        <con:parameterOrder>
+          <con:entry>BATAV-JWT-TOKEN</con:entry>
+        </con:parameterOrder>
+      </con:restRequest>
+    </con:config>
+  </con:testStep>
+  <con:testStep id="78c79314-2bcd-4b26-a0f8-374f0578235a" name="Add Radiologist" type="restrequest">
+    <con:settings/>
+    <con:config methodName="Add User" resourcePath="/users" service="http://localhost:2027" xsi:type="con:RestRequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <con:restRequest id="4cd3c879-5324-4baa-8d28-1e71eb6fb877" mediaType="application/json" name="Add Radiologist" postQueryString="false">
+        <con:settings>
+          <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;entry key="BATAV-JWT-TOKEN" value="${#TestCase#authHeader}" xmlns="http://eviware.com/soapui/config"/></con:setting>
+        </con:settings>
+        <con:encoding>UTF-8</con:encoding>
+        <con:endpoint>http://localhost:2027</con:endpoint>
+        <con:request>{
+  "username": "${#TestCase#RadiologistName}",
+  "context" : "${#TestCase#context}",
+  "password": "${#TestCase#RadiologistPwd}",
+  "name": "${#TestCase#RadiologistName}",
+  "email" : "${#TestCase#RadiologistEmail}",
+  "roles": [ 
+    "${#TestCase#Radio_Role}",
+	"${#TestCase#Surgeon_Role}"
+	]
+}</con:request>
+        <con:originalUri>http://localhost/users</con:originalUri>
+        <con:assertion id="dde52a92-6cf3-4e03-b1df-0f341e4884dc" name="Valid HTTP Status Codes" type="Valid HTTP Status Codes">
+          <con:configuration>
+            <codes>201, 409</codes>
+          </con:configuration>
+        </con:assertion>
+        <con:credentials>
+          <con:authType>No Authorization</con:authType>
+        </con:credentials>
+        <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+        <con:jmsPropertyConfig/>
+        <con:parameters>
+          <entry key="BATAV-JWT-TOKEN" value="${#TestCase#authHeader}" xmlns="http://eviware.com/soapui/config"/>
+        </con:parameters>
+        <con:parameterOrder>
+          <con:entry>BATAV-JWT-TOKEN</con:entry>
+        </con:parameterOrder>
+      </con:restRequest>
+    </con:config>
+  </con:testStep>
+  <con:testStep id="d83b813d-7bfe-4876-b041-74c9f372e972" name="Add Nurse" type="restrequest">
+    <con:settings/>
+    <con:config methodName="Add User" resourcePath="/users" service="http://localhost:2027" xsi:type="con:RestRequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <con:restRequest id="4cd3c879-5324-4baa-8d28-1e71eb6fb877" mediaType="application/json" name="Add Nurse" postQueryString="false">
+        <con:settings>
+          <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;entry key="BATAV-JWT-TOKEN" value="${#TestCase#authHeader}" xmlns="http://eviware.com/soapui/config"/></con:setting>
+        </con:settings>
+        <con:encoding>UTF-8</con:encoding>
+        <con:endpoint>http://localhost:2027</con:endpoint>
+        <con:request>{
+  "username": "${#TestCase#NurseName}",
+  "context" : "${#TestCase#context}",
+  "password": "${#TestCase#NursePwd}",
+  "name": "${#TestCase#NurseName}",
+  "email" : "${#TestCase#NurseEmail}",
+  "roles": [ 
+	"${#TestCase#Nurse_Role}"
+	]
+}</con:request>
+        <con:originalUri>http://localhost/users</con:originalUri>
+        <con:assertion id="dde52a92-6cf3-4e03-b1df-0f341e4884dc" name="Valid HTTP Status Codes" type="Valid HTTP Status Codes">
+          <con:configuration>
+            <codes>201, 409</codes>
+          </con:configuration>
+        </con:assertion>
+        <con:credentials>
+          <con:authType>No Authorization</con:authType>
+        </con:credentials>
+        <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+        <con:jmsPropertyConfig/>
+        <con:parameters>
+          <entry key="BATAV-JWT-TOKEN" value="${#TestCase#authHeader}" xmlns="http://eviware.com/soapui/config"/>
+        </con:parameters>
+        <con:parameterOrder>
+          <con:entry>BATAV-JWT-TOKEN</con:entry>
+        </con:parameterOrder>
+      </con:restRequest>
+    </con:config>
+  </con:testStep>
+  <con:testStep id="54ceec81-1bdf-4731-b239-36ed4c6dc66a" name="Add Surgeon" type="restrequest">
+    <con:settings/>
+    <con:config methodName="Add User" resourcePath="/users" service="http://localhost:2027" xsi:type="con:RestRequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <con:restRequest id="4cd3c879-5324-4baa-8d28-1e71eb6fb877" mediaType="application/json" name="Add Surgeon" postQueryString="false">
+        <con:settings>
+          <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;entry key="BATAV-JWT-TOKEN" value="${#TestCase#authHeader}" xmlns="http://eviware.com/soapui/config"/></con:setting>
+        </con:settings>
+        <con:encoding>UTF-8</con:encoding>
+        <con:endpoint>http://localhost:2027</con:endpoint>
+        <con:request>{
+  "username": "${#TestCase#SurgeonName}",
+  "context" : "${#TestCase#context}",
+  "password": "${#TestCase#SurgeonPwd}",
+  "name": "${#TestCase#SurgeonName}",
+  "email" : "${#TestCase#SurgeonEmail}",
+  "roles": [ 
+    "${#TestCase#TP_Role}",
+	"${#TestCase#Radio_Role}",
+	"${#TestCase#Surgeon_Role}"
+	]
+}</con:request>
+        <con:originalUri>http://localhost/users</con:originalUri>
+        <con:assertion id="dde52a92-6cf3-4e03-b1df-0f341e4884dc" name="Valid HTTP Status Codes" type="Valid HTTP Status Codes">
+          <con:configuration>
+            <codes>201, 409</codes>
+          </con:configuration>
+        </con:assertion>
+        <con:credentials>
+          <con:authType>No Authorization</con:authType>
+        </con:credentials>
+        <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+        <con:jmsPropertyConfig/>
+        <con:parameters>
+          <entry key="BATAV-JWT-TOKEN" value="${#TestCase#authHeader}" xmlns="http://eviware.com/soapui/config"/>
+        </con:parameters>
+        <con:parameterOrder>
+          <con:entry>BATAV-JWT-TOKEN</con:entry>
+        </con:parameterOrder>
+      </con:restRequest>
+    </con:config>
+  </con:testStep>
+  <con:testStep id="592e528d-9616-4e0d-9c96-426d072cb5fd" name="Get All Users" type="restrequest">
+    <con:settings/>
+    <con:config methodName="Get All Users" resourcePath="/users" service="http://localhost:2027" xsi:type="con:RestRequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <con:restRequest id="7a39e681-fdfa-49b0-a3c4-76e5fd5f428d" mediaType="application/json" name="Get All Users">
+        <con:settings>
+          <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;entry key="BATAV-JWT-TOKEN" value="${#TestCase#authHeader}" xmlns="http://eviware.com/soapui/config"/></con:setting>
+        </con:settings>
+        <con:encoding>UTF-8</con:encoding>
+        <con:endpoint>http://localhost:2027</con:endpoint>
+        <con:request/>
+        <con:originalUri>http://localhost/users</con:originalUri>
+        <con:assertion id="8ddfb8a0-e88d-41f3-ac74-ff4f7b5ea6aa" name="Contains" type="Simple Contains">
+          <con:configuration>
+            <token/>
+            <ignoreCase>false</ignoreCase>
+            <useRegEx>false</useRegEx>
+          </con:configuration>
+        </con:assertion>
+        <con:credentials>
+          <con:authType>No Authorization</con:authType>
+        </con:credentials>
+        <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+        <con:jmsPropertyConfig/>
+        <con:parameters/>
+      </con:restRequest>
+    </con:config>
+  </con:testStep>
+  <con:testStep id="d1ea3527-7839-45fa-8f25-18cb2444a899" name="Login Doctor" type="restrequest">
+    <con:settings/>
+    <con:config methodName="login" resourcePath="/identity/login" service="http://localhost:2027" xsi:type="con:RestRequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <con:restRequest id="04a9bd3b-a23b-4080-b8bc-7d29d9f3440e" mediaType="application/json" name="Login Doctor" postQueryString="false">
+        <con:settings>
+          <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting>
+        </con:settings>
+        <con:endpoint>http://localhost:2027</con:endpoint>
+        <con:request>{
+  "username" : "${#TestCase#DoctorName}",
+  "password" : "${#TestCase#DoctorPwd}",
+  "context"  : "${#TestCase#context}"
+}</con:request>
+        <con:originalUri>http://localhost/identity/login</con:originalUri>
+        <con:assertion id="ff5110be-d6db-42a4-95cb-afb7fe62c870" name="Valid HTTP Status Codes" type="Valid HTTP Status Codes">
+          <con:configuration>
+            <codes>204</codes>
+          </con:configuration>
+        </con:assertion>
+        <con:credentials>
+          <con:authType>No Authorization</con:authType>
+        </con:credentials>
+        <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+        <con:jmsPropertyConfig/>
+        <con:parameters>
+          <entry key="login" value="" xmlns="http://eviware.com/soapui/config"/>
+        </con:parameters>
+        <con:parameterOrder>
+          <con:entry>login</con:entry>
+        </con:parameterOrder>
+      </con:restRequest>
+    </con:config>
+  </con:testStep>
+  <con:testStep id="3064c5e1-2f1d-4808-97d7-42181c64eaef" name="Get Token For Doctor" type="groovy">
+    <con:settings/>
+    <con:config>
+      <script>// get the header from the previous test step.
+def previousStep = testRunner.testCase.getTestStepAt(context.getCurrentStepIndex()-1).getLabel()
+log.info("Trying to get JWT token from test step: " + previousStep)
+
+def headerValue = testRunner.testCase.getTestStepByName(previousStep).httpRequest.response.responseHeaders["BATAV-JWT-TOKEN"].get(0)
+
+// log the value
+log.info("headerValue: " + headerValue)
+
+
+// set the property at the test suite level if needed in multiple testcases
+testRunner.testCase.setPropertyValue("authHeader", headerValue.toString())</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep id="2d81d542-edea-4a18-8192-e63d033156dd" name="User1 Start Case LongitudinalPatientRecord" type="restrequest">
+    <con:settings/>
+    <con:config methodName="start_case" resourcePath="/cases" service="http://localhost:2027" xsi:type="con:RestRequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <con:restRequest id="f86b92f8-6a92-4c43-a124-17796e104408" mediaType="application/json" name="User1 Start Case LongitudinalPatientRecord" postQueryString="false">
+        <con:settings>
+          <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;entry key="BATAV-JWT-TOKEN" value="${#TestCase#authHeader}" xmlns="http://eviware.com/soapui/config"/></con:setting>
+        </con:settings>
+        <con:endpoint>http://localhost:2027</con:endpoint>
+        <con:request>{
+	"definition": "LongitudinalPatientRecord.xml",
+	"name": "LongitudinalPatientRecord",
+	"inputs": {
+		"Patient": {
+			"Name": "${#TestCase#User1}",
+			"Gender": "${#TestCase#Gender_FM}",
+			"DateOfBirth": "${#TestCase#User1_DB}",
+			"Address": "${#TestCase#User1_AD}",
+			"ID": "${#TestCase#User1_ID}",
+			"Active": true,
+			"Telecom": "${#TestCase#User1_TL}",
+			"Email": "${#TestCase#User1_EM}",
+			"Photo": "${#TestCase#User1_PH}"
+		}
+	},
+	"caseTeam": {
+		"members": []
+	}
+}</con:request>
+        <con:originalUri>http://localhost/cases</con:originalUri>
+        <con:assertion id="01c6fd84-67e1-494d-b5ff-b629ad5a95d5" name="Valid HTTP Status Codes" type="Valid HTTP Status Codes">
+          <con:configuration>
+            <codes>200</codes>
+          </con:configuration>
+        </con:assertion>
+        <con:credentials>
+          <con:authType>No Authorization</con:authType>
+        </con:credentials>
+        <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+        <con:jmsPropertyConfig/>
+        <con:parameters/>
+        <con:parameterOrder/>
+      </con:restRequest>
+    </con:config>
+  </con:testStep>
+  <con:testStep id="faac5e21-f1f0-4a82-aec2-928ce58c9940" name="User2 Start Case LongitudinalPatientRecord" type="restrequest">
+    <con:settings/>
+    <con:config methodName="start_case" resourcePath="/cases" service="http://localhost:2027" xsi:type="con:RestRequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <con:restRequest id="f86b92f8-6a92-4c43-a124-17796e104408" mediaType="application/json" name="User2 Start Case LongitudinalPatientRecord" postQueryString="false">
+        <con:settings>
+          <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;entry key="BATAV-JWT-TOKEN" value="${#TestCase#authHeader}" xmlns="http://eviware.com/soapui/config"/></con:setting>
+        </con:settings>
+        <con:endpoint>http://localhost:2027</con:endpoint>
+        <con:request>{
+	"definition": "LongitudinalPatientRecord.xml",
+	"name": "LongitudinalPatientRecord",
+	"inputs": {
+		"Patient": {
+			"Name": "${#TestCase#User2}",
+			"Gender": "${#TestCase#Gender_FM}",
+			"DateOfBirth": "${#TestCase#User2_DB}",
+			"Address": "${#TestCase#User2_AD}",
+			"ID": "${#TestCase#User2_ID}",
+			"Active": true,
+			"Telecom": "${#TestCase#User2_TL}",
+			"Email": "${#TestCase#User2_EM}",
+			"Photo": "${#TestCase#User2_PH}"
+		}
+	},
+	"caseTeam": {
+		"members": []
+	}
+}</con:request>
+        <con:originalUri>http://localhost/cases</con:originalUri>
+        <con:assertion id="01c6fd84-67e1-494d-b5ff-b629ad5a95d5" name="Valid HTTP Status Codes" type="Valid HTTP Status Codes">
+          <con:configuration>
+            <codes>200</codes>
+          </con:configuration>
+        </con:assertion>
+        <con:credentials>
+          <con:authType>No Authorization</con:authType>
+        </con:credentials>
+        <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+        <con:jmsPropertyConfig/>
+        <con:parameters/>
+        <con:parameterOrder/>
+      </con:restRequest>
+    </con:config>
+  </con:testStep>
+  <con:testStep id="ce14a81a-691e-464a-9346-e31af49871c9" name="User3 Start Case LongitudinalPatientRecord" type="restrequest">
+    <con:settings/>
+    <con:config methodName="start_case" resourcePath="/cases" service="http://localhost:2027" xsi:type="con:RestRequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <con:restRequest id="f86b92f8-6a92-4c43-a124-17796e104408" mediaType="application/json" name="User3 Start Case LongitudinalPatientRecord" postQueryString="false">
+        <con:settings>
+          <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;entry key="BATAV-JWT-TOKEN" value="${#TestCase#authHeader}" xmlns="http://eviware.com/soapui/config"/></con:setting>
+        </con:settings>
+        <con:endpoint>http://localhost:2027</con:endpoint>
+        <con:request>{
+	"definition": "LongitudinalPatientRecord.xml",
+	"name": "LongitudinalPatientRecord",
+	"inputs": {
+		"Patient": {
+			"Name": "${#TestCase#User3}",
+			"Gender": "${#TestCase#Gender_M}",
+			"DateOfBirth": "${#TestCase#User3_DB}",
+			"Address": "${#TestCase#User3_AD}",
+			"ID": "${#TestCase#User3_ID}",
+			"Active": true,
+			"Telecom": "${#TestCase#User3_TL}",
+			"Email": "${#TestCase#User3_EM}",
+			"Photo": "${#TestCase#User3_PH}"
+		}
+	},
+	"caseTeam": {
+		"members": []
+	}
+}</con:request>
+        <con:originalUri>http://localhost/cases</con:originalUri>
+        <con:assertion id="01c6fd84-67e1-494d-b5ff-b629ad5a95d5" name="Valid HTTP Status Codes" type="Valid HTTP Status Codes">
+          <con:configuration>
+            <codes>200</codes>
+          </con:configuration>
+        </con:assertion>
+        <con:credentials>
+          <con:authType>No Authorization</con:authType>
+        </con:credentials>
+        <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+        <con:jmsPropertyConfig/>
+        <con:parameters/>
+        <con:parameterOrder/>
+      </con:restRequest>
+    </con:config>
+  </con:testStep>
+  <con:testStep id="669b90fd-532c-4f15-8a45-02812a90129b" name="User4 Start Case LongitudinalPatientRecord" type="restrequest">
+    <con:settings/>
+    <con:config methodName="start_case" resourcePath="/cases" service="http://localhost:2027" xsi:type="con:RestRequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <con:restRequest id="f86b92f8-6a92-4c43-a124-17796e104408" mediaType="application/json" name="User4 Start Case LongitudinalPatientRecord" postQueryString="false">
+        <con:settings>
+          <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;entry key="BATAV-JWT-TOKEN" value="${#TestCase#authHeader}" xmlns="http://eviware.com/soapui/config"/></con:setting>
+        </con:settings>
+        <con:endpoint>http://localhost:2027</con:endpoint>
+        <con:request>{
+	"definition": "LongitudinalPatientRecord.xml",
+	"name": "LongitudinalPatientRecord",
+	"inputs": {
+		"Patient": {
+			"Name": "${#TestCase#User4}",
+			"Gender": "${#TestCase#Gender_M}",
+			"DateOfBirth": "${#TestCase#User4_DB}",
+			"Address": "${#TestCase#User4_AD}",
+			"ID": "${#TestCase#User4_ID}",
+			"Active": true,
+			"Telecom": "${#TestCase#User4_TL}",
+			"Email": "${#TestCase#User4_EM}",
+			"Photo": "${#TestCase#User4_PH}"
+		}
+	},
+	"caseTeam": {
+		"members": []
+	}
+}</con:request>
+        <con:originalUri>http://localhost/cases</con:originalUri>
+        <con:assertion id="01c6fd84-67e1-494d-b5ff-b629ad5a95d5" name="Valid HTTP Status Codes" type="Valid HTTP Status Codes">
+          <con:configuration>
+            <codes>200</codes>
+          </con:configuration>
+        </con:assertion>
+        <con:credentials>
+          <con:authType>No Authorization</con:authType>
+        </con:credentials>
+        <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+        <con:jmsPropertyConfig/>
+        <con:parameters/>
+        <con:parameterOrder/>
+      </con:restRequest>
+    </con:config>
+  </con:testStep>
+  <con:testStep id="fa7f37fd-9d31-43a8-940a-7ceb65e8ec21" name="User5 Start Case LongitudinalPatientRecord" type="restrequest">
+    <con:settings/>
+    <con:config methodName="start_case" resourcePath="/cases" service="http://localhost:2027" xsi:type="con:RestRequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <con:restRequest id="f86b92f8-6a92-4c43-a124-17796e104408" mediaType="application/json" name="User5 Start Case LongitudinalPatientRecord" postQueryString="false">
+        <con:settings>
+          <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;entry key="BATAV-JWT-TOKEN" value="${#TestCase#authHeader}" xmlns="http://eviware.com/soapui/config"/></con:setting>
+        </con:settings>
+        <con:endpoint>http://localhost:2027</con:endpoint>
+        <con:request>{
+	"definition": "LongitudinalPatientRecord.xml",
+	"name": "LongitudinalPatientRecord",
+	"inputs": {
+		"Patient": {
+			"Name": "${#TestCase#User5}",
+			"Gender": "${#TestCase#Gender_FM}",
+			"DateOfBirth": "${#TestCase#User5_DB}",
+			"Address": "${#TestCase#User5_AD}",
+			"ID": "${#TestCase#User5_ID}",
+			"Active": true,
+			"Telecom": "${#TestCase#User5_TL}",
+			"Email": "${#TestCase#User5_EM}",
+			"Photo": "${#TestCase#User5_PH}"
+		}
+	},
+	"caseTeam": {
+		"members": []
+	}
+}</con:request>
+        <con:originalUri>http://localhost/cases</con:originalUri>
+        <con:assertion id="01c6fd84-67e1-494d-b5ff-b629ad5a95d5" name="Valid HTTP Status Codes" type="Valid HTTP Status Codes">
+          <con:configuration>
+            <codes>200</codes>
+          </con:configuration>
+        </con:assertion>
+        <con:credentials>
+          <con:authType>No Authorization</con:authType>
+        </con:credentials>
+        <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+        <con:jmsPropertyConfig/>
+        <con:parameters/>
+        <con:parameterOrder/>
+      </con:restRequest>
+    </con:config>
+  </con:testStep>
+  <con:testStep id="d4896662-2168-4952-9f8f-12eb8894e009" name="User6 Start Case LongitudinalPatientRecord" type="restrequest">
+    <con:settings/>
+    <con:config methodName="start_case" resourcePath="/cases" service="http://localhost:2027" xsi:type="con:RestRequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <con:restRequest id="f86b92f8-6a92-4c43-a124-17796e104408" mediaType="application/json" name="User6 Start Case LongitudinalPatientRecord" postQueryString="false">
+        <con:settings>
+          <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;entry key="BATAV-JWT-TOKEN" value="${#TestCase#authHeader}" xmlns="http://eviware.com/soapui/config"/></con:setting>
+        </con:settings>
+        <con:endpoint>http://localhost:2027</con:endpoint>
+        <con:request>{
+	"definition": "LongitudinalPatientRecord.xml",
+	"name": "LongitudinalPatientRecord",
+	"inputs": {
+		"Patient": {
+			"Name": "${#TestCase#User6}",
+			"Gender": "${#TestCase#Gender_M}",
+			"DateOfBirth": "${#TestCase#User6_DB}",
+			"Address": "${#TestCase#User6_AD}",
+			"ID": "${#TestCase#User6_ID}",
+			"Active": true,
+			"Telecom": "${#TestCase#User6_TL}",
+			"Email": "${#TestCase#User6_EM}",
+			"Photo": "${#TestCase#User6_PH}"
+		}
+	},
+	"caseTeam": {
+		"members": []
+	}
+}</con:request>
+        <con:originalUri>http://localhost/cases</con:originalUri>
+        <con:assertion id="01c6fd84-67e1-494d-b5ff-b629ad5a95d5" name="Valid HTTP Status Codes" type="Valid HTTP Status Codes">
+          <con:configuration>
+            <codes>200</codes>
+          </con:configuration>
+        </con:assertion>
+        <con:credentials>
+          <con:authType>No Authorization</con:authType>
+        </con:credentials>
+        <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+        <con:jmsPropertyConfig/>
+        <con:parameters/>
+        <con:parameterOrder/>
+      </con:restRequest>
+    </con:config>
+  </con:testStep>
+  <con:testStep id="ea35ea89-77fb-4b33-a099-0ac241849ca5" name="User7 Start Case LongitudinalPatientRecord" type="restrequest">
+    <con:settings/>
+    <con:config methodName="start_case" resourcePath="/cases" service="http://localhost:2027" xsi:type="con:RestRequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <con:restRequest id="f86b92f8-6a92-4c43-a124-17796e104408" mediaType="application/json" name="User7 Start Case LongitudinalPatientRecord" postQueryString="false">
+        <con:settings>
+          <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;entry key="BATAV-JWT-TOKEN" value="${#TestCase#authHeader}" xmlns="http://eviware.com/soapui/config"/></con:setting>
+        </con:settings>
+        <con:endpoint>http://localhost:2027</con:endpoint>
+        <con:request>{
+	"definition": "LongitudinalPatientRecord.xml",
+	"name": "LongitudinalPatientRecord",
+	"inputs": {
+		"Patient": {
+			"Name": "${#TestCase#User7}",
+			"Gender": "${#TestCase#Gender_M}",
+			"DateOfBirth": "${#TestCase#User7_DB}",
+			"Address": "${#TestCase#User7_AD}",
+			"ID": "${#TestCase#User7_ID}",
+			"Active": true,
+			"Telecom": "${#TestCase#User7_TL}",
+			"Email": "${#TestCase#User7_EM}",
+			"Photo": "${#TestCase#User7_PH}"
+		}
+	},
+	"caseTeam": {
+		"members": []
+	}
+}</con:request>
+        <con:originalUri>http://localhost/cases</con:originalUri>
+        <con:assertion id="01c6fd84-67e1-494d-b5ff-b629ad5a95d5" name="Valid HTTP Status Codes" type="Valid HTTP Status Codes">
+          <con:configuration>
+            <codes>200</codes>
+          </con:configuration>
+        </con:assertion>
+        <con:credentials>
+          <con:authType>No Authorization</con:authType>
+        </con:credentials>
+        <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+        <con:jmsPropertyConfig/>
+        <con:parameters/>
+        <con:parameterOrder/>
+      </con:restRequest>
+    </con:config>
+  </con:testStep>
+  <con:testStep id="8d8fa79f-f8b0-4559-b3bc-6f9f1d8f63bb" name="User8 Start Case LongitudinalPatientRecord" type="restrequest">
+    <con:settings/>
+    <con:config methodName="start_case" resourcePath="/cases" service="http://localhost:2027" xsi:type="con:RestRequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <con:restRequest id="f86b92f8-6a92-4c43-a124-17796e104408" mediaType="application/json" name="User8 Start Case LongitudinalPatientRecord" postQueryString="false">
+        <con:settings>
+          <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;entry key="BATAV-JWT-TOKEN" value="${#TestCase#authHeader}" xmlns="http://eviware.com/soapui/config"/></con:setting>
+        </con:settings>
+        <con:endpoint>http://localhost:2027</con:endpoint>
+        <con:request>{
+	"definition": "LongitudinalPatientRecord.xml",
+	"name": "LongitudinalPatientRecord",
+	"inputs": {
+		"Patient": {
+			"Name": "${#TestCase#User8}",
+			"Gender": "${#TestCase#Gender_FM}",
+			"DateOfBirth": "${#TestCase#User8_DB}",
+			"Address": "${#TestCase#User8_AD}",
+			"ID": "${#TestCase#User8_ID}",
+			"Active": true,
+			"Telecom": "${#TestCase#User8_TL}",
+			"Email": "${#TestCase#User8_EM}",
+			"Photo": "${#TestCase#User8_PH}"
+		}
+	},
+	"caseTeam": {
+		"members": []
+	}
+}</con:request>
+        <con:originalUri>http://localhost/cases</con:originalUri>
+        <con:assertion id="01c6fd84-67e1-494d-b5ff-b629ad5a95d5" name="Valid HTTP Status Codes" type="Valid HTTP Status Codes">
+          <con:configuration>
+            <codes>200</codes>
+          </con:configuration>
+        </con:assertion>
+        <con:credentials>
+          <con:authType>No Authorization</con:authType>
+        </con:credentials>
+        <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+        <con:jmsPropertyConfig/>
+        <con:parameters/>
+        <con:parameterOrder/>
+      </con:restRequest>
+    </con:config>
+  </con:testStep>
+  <con:testStep id="5e52f259-f7c3-4ddd-ad6c-caa3e69dd4e4" name="User9 Start Case LongitudinalPatientRecord" type="restrequest">
+    <con:settings/>
+    <con:config methodName="start_case" resourcePath="/cases" service="http://localhost:2027" xsi:type="con:RestRequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <con:restRequest id="f86b92f8-6a92-4c43-a124-17796e104408" mediaType="application/json" name="User9 Start Case LongitudinalPatientRecord" postQueryString="false">
+        <con:settings>
+          <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;entry key="BATAV-JWT-TOKEN" value="${#TestCase#authHeader}" xmlns="http://eviware.com/soapui/config"/></con:setting>
+        </con:settings>
+        <con:endpoint>http://localhost:2027</con:endpoint>
+        <con:request>{
+	"definition": "LongitudinalPatientRecord.xml",
+	"name": "LongitudinalPatientRecord",
+	"inputs": {
+		"Patient": {
+			"Name": "${#TestCase#User9}",
+			"Gender": "${#TestCase#Gender_M}",
+			"DateOfBirth": "${#TestCase#User9_DB}",
+			"Address": "${#TestCase#User9_AD}",
+			"ID": "${#TestCase#User9_ID}",
+			"Active": true,
+			"Telecom": "${#TestCase#User9_TL}",
+			"Email": "${#TestCase#User9_EM}",
+			"Photo": "${#TestCase#User9_PH}"
+		}
+	},
+	"caseTeam": {
+		"members": []
+	}
+}</con:request>
+        <con:originalUri>http://localhost/cases</con:originalUri>
+        <con:assertion id="01c6fd84-67e1-494d-b5ff-b629ad5a95d5" name="Valid HTTP Status Codes" type="Valid HTTP Status Codes">
+          <con:configuration>
+            <codes>200</codes>
+          </con:configuration>
+        </con:assertion>
+        <con:credentials>
+          <con:authType>No Authorization</con:authType>
+        </con:credentials>
+        <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+        <con:jmsPropertyConfig/>
+        <con:parameters/>
+        <con:parameterOrder/>
+      </con:restRequest>
+    </con:config>
+  </con:testStep>
+  <con:testStep id="ed439663-c3fc-402b-a2f7-41e8e0aea96c" name="User10 Start Case LongitudinalPatientRecord" type="restrequest">
+    <con:settings/>
+    <con:config methodName="start_case" resourcePath="/cases" service="http://localhost:2027" xsi:type="con:RestRequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <con:restRequest id="f86b92f8-6a92-4c43-a124-17796e104408" mediaType="application/json" name="User10 Start Case LongitudinalPatientRecord" postQueryString="false">
+        <con:settings>
+          <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;entry key="BATAV-JWT-TOKEN" value="${#TestCase#authHeader}" xmlns="http://eviware.com/soapui/config"/></con:setting>
+        </con:settings>
+        <con:endpoint>http://localhost:2027</con:endpoint>
+        <con:request>{
+	"definition": "LongitudinalPatientRecord.xml",
+	"name": "LongitudinalPatientRecord",
+	"inputs": {
+		"Patient": {
+			"Name": "${#TestCase#User9}",
+			"Gender": "${#TestCase#Gender_M}",
+			"DateOfBirth": "${#TestCase#User9_DB}",
+			"Address": "${#TestCase#User9_AD}",
+			"ID": "${#TestCase#User9_ID}",
+			"Active": true,
+			"Telecom": "${#TestCase#User9_TL}",
+			"Email": "${#TestCase#User9_EM}",
+			"Photo": "${#TestCase#User10_PH}"
+		}
+	},
+	"caseTeam": {
+		"members": []
+	}
+}</con:request>
+        <con:originalUri>http://localhost/cases</con:originalUri>
+        <con:assertion id="01c6fd84-67e1-494d-b5ff-b629ad5a95d5" name="Valid HTTP Status Codes" type="Valid HTTP Status Codes">
+          <con:configuration>
+            <codes>200</codes>
+          </con:configuration>
+        </con:assertion>
+        <con:credentials>
+          <con:authType>No Authorization</con:authType>
+        </con:credentials>
+        <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+        <con:jmsPropertyConfig/>
+        <con:parameters/>
+        <con:parameterOrder/>
+      </con:restRequest>
+    </con:config>
+  </con:testStep>
+  <con:testStep id="2f90d109-1fac-40aa-a32b-8cb0f280640a" name="GetCase of LongitudinalPatientRecord" type="restrequest">
+    <con:settings/>
+    <con:config methodName="GetCase" resourcePath="/cases/{caseInstanceId}" service="http://localhost:2027" xsi:type="con:RestRequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <con:restRequest id="c976c693-eed6-4760-ba39-3e3aab071d25" mediaType="application/json" name="GetCase of LongitudinalPatientRecord">
+        <con:settings>
+          <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment xmlns:con="http://eviware.com/soapui/config">
+  &lt;con:entry key="BATAV-JWT-TOKEN" value="${#TestCase#authHeader}"/>
+  &lt;con:entry key="Case-Last-Modified" value="${#TestCase#Case-Last-Modified}"/>
+&lt;/xml-fragment></con:setting>
+        </con:settings>
+        <con:encoding>UTF-8</con:encoding>
+        <con:endpoint>http://localhost:2027</con:endpoint>
+        <con:request/>
+        <con:originalUri>http://localhost/cases/caseInstanceId</con:originalUri>
+        <con:assertion id="8005ea66-3f4b-41ba-bd83-f3b303bc1fdd" name="Valid HTTP Status Codes" type="Valid HTTP Status Codes">
+          <con:configuration>
+            <codes>200</codes>
+          </con:configuration>
+        </con:assertion>
+        <con:credentials>
+          <con:authType>No Authorization</con:authType>
+        </con:credentials>
+        <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+        <con:jmsPropertyConfig/>
+        <con:parameters>
+          <entry key="caseInstanceId" value="${#TestCase#caseInstanceId}" xmlns="http://eviware.com/soapui/config"/>
+        </con:parameters>
+        <con:parameterOrder>
+          <con:entry>caseInstanceId</con:entry>
+        </con:parameterOrder>
+      </con:restRequest>
+    </con:config>
+  </con:testStep>
+  <con:loadTest id="09767254-addd-443a-a5b4-1dd4f4ed2fad" name="LoadTest 1">
+    <con:settings>
+      <con:setting id="HttpSettings@close-connections">false</con:setting>
+    </con:settings>
+    <con:threadCount>5</con:threadCount>
+    <con:startDelay>0</con:startDelay>
+    <con:sampleInterval>250</con:sampleInterval>
+    <con:calculateTPSOnTimePassed>true</con:calculateTPSOnTimePassed>
+    <con:resetStatisticsOnThreadCountChange>true</con:resetStatisticsOnThreadCountChange>
+    <con:historyLimit>-1</con:historyLimit>
+    <con:testLimit>60</con:testLimit>
+    <con:limitType>TIME</con:limitType>
+    <con:loadStrategy>
+      <con:type>Simple</con:type>
+    </con:loadStrategy>
+    <con:assertion name="Step Status" type="Step Status"/>
+    <con:maxAssertionErrors>100</con:maxAssertionErrors>
+    <con:cancelExcessiveThreads>true</con:cancelExcessiveThreads>
+    <con:strategyInterval>500</con:strategyInterval>
+  </con:loadTest>
+  <con:loadTest id="d754a142-63c7-4fe6-bc9b-ba261d86a1d5" name="LoadTest 2">
+    <con:settings>
+      <con:setting id="HttpSettings@close-connections">false</con:setting>
+    </con:settings>
+    <con:threadCount>30</con:threadCount>
+    <con:startDelay>0</con:startDelay>
+    <con:sampleInterval>250</con:sampleInterval>
+    <con:calculateTPSOnTimePassed>true</con:calculateTPSOnTimePassed>
+    <con:resetStatisticsOnThreadCountChange>true</con:resetStatisticsOnThreadCountChange>
+    <con:historyLimit>-1</con:historyLimit>
+    <con:testLimit>60</con:testLimit>
+    <con:limitType>TIME</con:limitType>
+    <con:loadStrategy>
+      <con:type>Simple</con:type>
+      <con:config>
+        <testDelay>250</testDelay>
+        <randomFactor>0.5</randomFactor>
+      </con:config>
+    </con:loadStrategy>
+    <con:assertion name="Step Status" type="Step Status"/>
+    <con:maxAssertionErrors>100</con:maxAssertionErrors>
+    <con:cancelExcessiveThreads>true</con:cancelExcessiveThreads>
+    <con:strategyInterval>500</con:strategyInterval>
+  </con:loadTest>
+  <con:properties>
+    <con:property>
+      <con:name>authHeader</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>caseInstanceId</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>Case-Last-Modified</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>subCaseId</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>subCase-Last-Modified</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>planItemId</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>Last-Modified</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>LastModified</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>subSubCaseInstanceId</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>taskId</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>userEventId</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>RequestorName</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>RequestorPwd</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>ApproverName</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>ApproverPwd</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>context</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>AdminName</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>AdminPwd</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>ReceiverEmail</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>Doctor</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>DoctorName</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>DoctorPwd</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>DoctorEmail</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>Patient</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>PatientName</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>PatientPwd</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>PatientEmail</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>discretionaryItems</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>discretionaryItemsName</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>discretionaryItemsDefinitionId</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>discretionaryItemsParentId</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>discretionaryItemsplanItemId</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>User1</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>User2</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>User3</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>User4</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>User5</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>User6</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>User7</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>User8</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>User9</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>User10</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>User11</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>User12</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>Gender_M</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>Gender_FM</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>User1_DB</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>User2_DB</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>User3_DB</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>User4_DB</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>User5_DB</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>User6_DB</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>User7_DB</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>User8_DB</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>User9_DB</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>User10_DB</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>User1_AD</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>User2_AD</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>User3_AD</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>User4_AD</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>User5_AD</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>User6_AD</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>User7_AD</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>User8_AD</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>User9_AD</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>User10_AD</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>User1_ID</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>User2_ID</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>User3_ID</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>User4_ID</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>User5_ID</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>User6_ID</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>User7_ID</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>User8_ID</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>User9_ID</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>User10_ID</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>User1_TL</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>User2_TL</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>User3_TL</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>User4_TL</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>User5_TL</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>User6_TL</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>User7_TL</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>User8_TL</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>User9_TL</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>User10_TL</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>User1_EM</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>User2_EM</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>User3_EM</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>User4_EM</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>User5_EM</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>User6_EM</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>User7_EM</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>User8_EM</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>User9_EM</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>User10_EM</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>Oncology_HOD</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>Oncology_HODName</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>Oncology_HODPwd</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>Oncology_HODEmail</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>TreatingPhysician</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>TreatingPhysicianName</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>TreatingPhysicianPwd</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>TreatingPhysicianEmail</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>Radiologist</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>RadiologistName</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>RadiologistPwd</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>RadiologistEmail</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>Nurse</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>NurseName</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>NursePwd</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>NurseEmail</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>Surgeon</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>SurgeonName</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>SurgeonPwd</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>SurgeonEmail</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>User1_PH</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>User2_PH</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>User3_PH</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>User4_PH</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>User5_PH</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>User6_PH</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>User7_PH</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>User8_PH</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>User9_PH</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>User10_PH</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>TP_Role</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>Radio_Role</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>Nurse_Role</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>Surgeon_Role</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>Patient_Role</con:name>
+      <con:value/>
+    </con:property>
+  </con:properties>
+</con:testCase>

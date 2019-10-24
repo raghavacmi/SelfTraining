@@ -1,0 +1,70 @@
+<humantask>
+    <batav:implementation xmlns:batav="io.batav" name="editpatientdetails" description="Edit Patient Details" class="io.batav.cmmn.definition.task.WorkflowTaskDefinition">
+        <input id="_dJRM_Patient" name="Patient"/>
+        <output id="_eEbG_Patient" name="Patient"/>
+        <task-model>{
+	"schema": {
+		"type": "object",
+		"properties": {
+			"Patient": {
+				"$ref": "#/definitions/Patient"
+			}
+		},
+		"definitions": {
+			"Patient": {
+				"title": "Patient Details",
+				"description": "Please fill details",
+				"type": "object",
+				"required": [
+					"ID",
+					"Name"
+				],
+				"properties": {
+					"Name": {
+						"type": "string",
+						"title": "Name",
+						"default": "Name"
+					},
+					"Gender": {
+						"type": "string",
+						"title": "Gender"
+					},
+					"DateOfBirth": {
+						"type": "string",
+						"format": "date",
+						"title": "Date of Birth"
+					},
+					"Address": {
+						"type":"string",
+						"title": "Address"
+					},
+					"ID": {
+						"type": "string",
+						"title": "PatientID",
+						"default": "ID"
+					},
+					"Active": {
+						"type": "boolean",
+						"title": "Active"
+					},
+					"Telecom": {
+						"type": "string",
+						"title": "Telecom",
+						"minLength": 10
+					},
+					"Email": {
+						"type": "string",
+						"title": "Email"
+					}
+				}
+			}
+		}
+	},
+	"uiSchema": {
+		"Address": {
+			"ui:widget": "textarea"
+		}
+	}
+}</task-model>
+    </batav:implementation>
+</humantask>

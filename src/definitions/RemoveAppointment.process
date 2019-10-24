@@ -1,0 +1,15 @@
+<process name="RemoveAppointment" description="" id="RemoveAppointment.process">
+    <input id="_HJG6_Patient_ID" name="PatientID"/>
+    <output id="_0b6A_Status" name="Status"/>
+    <extensionElements>
+        <batav:implementation xmlns:batav="io.batav" class="io.batav.cmmn.instance.process.http.HTTPCallDefinition">
+            <url>http://localhost:8080/somecall</url>
+            <method>POST</method>
+            <post-content>{"PatientID": "${PatientID}""}</post-content>
+            <http-headers>
+                <http-header name="Content-Type">application/json</http-header>
+            </http-headers>
+            <parameterMapping sourceRef="responsePayload" targetRef="Status"/>
+        </batav:implementation>
+    </extensionElements>
+</process>

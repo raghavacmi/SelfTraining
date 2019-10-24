@@ -1,0 +1,1680 @@
+<con:testCase failOnError="true" failTestCaseOnErrors="true" id="598db9d7-e1f4-47a0-86b1-6fcae3477bd6" keepSession="false" maxResults="0" name="CancerDiagnosis" searchProperties="true" xmlns:con="http://eviware.com/soapui/config">
+  <con:settings/>
+  <con:testStep id="6e614292-0b9d-45d5-80d9-2d5fad2fb08c" name="User information setup" type="groovy">
+    <con:settings/>
+    <con:config>
+      <script>// set the property at the test suite level if needed in multiple testcases
+testRunner.testCase.setPropertyValue("context", "PhilipsDemo")
+
+testRunner.testCase.setPropertyValue("AdminName", "admin")
+testRunner.testCase.setPropertyValue("AdminPwd", "admin")
+testRunner.testCase.setPropertyValue("Test", "Test")
+testRunner.testCase.setPropertyValue("Doctor", "doctor")
+testRunner.testCase.setPropertyValue("DoctorName", testRunner.testCase.getPropertyValue("Doctor"))
+testRunner.testCase.setPropertyValue("DoctorPwd", testRunner.testCase.getPropertyValue("Doctor"))
+testRunner.testCase.setPropertyValue("DoctorEmail", testRunner.testCase.getPropertyValue("Doctor") + "@hospital.com")
+
+testRunner.testCase.setPropertyValue("Patient", "patient")
+testRunner.testCase.setPropertyValue("PatientName", testRunner.testCase.getPropertyValue("Patient"))
+testRunner.testCase.setPropertyValue("PatientPwd", testRunner.testCase.getPropertyValue("Patient"))
+testRunner.testCase.setPropertyValue("PatientEmail", testRunner.testCase.getPropertyValue("Patient") + "@hospital.com")</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep id="7e7c4abc-2243-4051-9377-524a86ad218c" name="Login Admin" type="restrequest">
+    <con:settings/>
+    <con:config methodName="login" resourcePath="/identity/login" service="http://localhost:2027" xsi:type="con:RestRequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <con:restRequest id="04a9bd3b-a23b-4080-b8bc-7d29d9f3440e" mediaType="application/json" name="Login Admin" postQueryString="false">
+        <con:settings>
+          <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting>
+        </con:settings>
+        <con:endpoint>http://localhost:2027</con:endpoint>
+        <con:request>{
+  "username" : "${#TestCase#AdminName}",
+  "password" : "${#TestCase#AdminPwd}",
+  "context" : ""
+}</con:request>
+        <con:originalUri>http://localhost/identity/login</con:originalUri>
+        <con:assertion id="494493de-ec41-4bfe-a738-eb7cd5c64e1f" name="Valid HTTP Status Codes" type="Valid HTTP Status Codes">
+          <con:configuration>
+            <codes>204</codes>
+          </con:configuration>
+        </con:assertion>
+        <con:credentials>
+          <con:authType>No Authorization</con:authType>
+        </con:credentials>
+        <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+        <con:jmsPropertyConfig/>
+        <con:parameters>
+          <entry key="login" value="" xmlns="http://eviware.com/soapui/config"/>
+        </con:parameters>
+        <con:parameterOrder>
+          <con:entry>login</con:entry>
+        </con:parameterOrder>
+      </con:restRequest>
+    </con:config>
+  </con:testStep>
+  <con:testStep id="695205ea-c806-4e16-a19c-a340d4da3a55" name="get header from login response" type="groovy">
+    <con:settings/>
+    <con:config>
+      <script>// get the header from the previous test step.
+def previousStep = testRunner.testCase.getTestStepAt(context.getCurrentStepIndex()-1).getLabel()
+log.info("Trying to get JWT token from test step: " + previousStep)
+
+def headerValue = testRunner.testCase.getTestStepByName(previousStep).httpRequest.response.responseHeaders["BATAV-JWT-TOKEN"].get(0)
+
+// log the value
+log.info("headerValue: " + headerValue)
+
+
+// set the property at the test suite level if needed in multiple testcases
+testRunner.testCase.setPropertyValue("authHeader", headerValue.toString())</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep id="387e9dd8-a313-4108-b5b4-0b81e246f907" name="Add Doctor" type="restrequest">
+    <con:settings/>
+    <con:config methodName="Add User" resourcePath="/users" service="http://localhost:2027" xsi:type="con:RestRequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <con:restRequest id="4cd3c879-5324-4baa-8d28-1e71eb6fb877" mediaType="application/json" name="Add Doctor" postQueryString="false">
+        <con:settings>
+          <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;entry key="BATAV-JWT-TOKEN" value="${#TestCase#authHeader}" xmlns="http://eviware.com/soapui/config"/></con:setting>
+        </con:settings>
+        <con:encoding>UTF-8</con:encoding>
+        <con:endpoint>http://localhost:2027</con:endpoint>
+        <con:request>{
+  "username": "${#TestCase#DoctorName}",
+  "context" : "${#TestCase#context}",
+  "password": "${#TestCase#DoctorPwd}",
+  "name": "${#TestCase#DoctorName}",
+  "email" : "${#TestCase#DoctorEmail}",
+  "roles": [
+    "Doctor"
+  ]
+}</con:request>
+        <con:originalUri>http://localhost/users</con:originalUri>
+        <con:assertion id="dde52a92-6cf3-4e03-b1df-0f341e4884dc" name="Valid HTTP Status Codes" type="Valid HTTP Status Codes">
+          <con:configuration>
+            <codes>201, 409</codes>
+          </con:configuration>
+        </con:assertion>
+        <con:credentials>
+          <con:authType>No Authorization</con:authType>
+        </con:credentials>
+        <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+        <con:jmsPropertyConfig/>
+        <con:parameters>
+          <entry key="BATAV-JWT-TOKEN" value="${#TestCase#authHeader}" xmlns="http://eviware.com/soapui/config"/>
+        </con:parameters>
+        <con:parameterOrder>
+          <con:entry>BATAV-JWT-TOKEN</con:entry>
+        </con:parameterOrder>
+      </con:restRequest>
+    </con:config>
+  </con:testStep>
+  <con:testStep id="851511d7-bc23-4034-93d6-0e27ee50bfa1" name="Add Patient" type="restrequest">
+    <con:settings/>
+    <con:config methodName="Add User" resourcePath="/users" service="http://localhost:2027" xsi:type="con:RestRequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <con:restRequest id="4cd3c879-5324-4baa-8d28-1e71eb6fb877" mediaType="application/json" name="Add Patient" postQueryString="false">
+        <con:settings>
+          <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;entry key="BATAV-JWT-TOKEN" value="${#TestCase#authHeader}" xmlns="http://eviware.com/soapui/config"/></con:setting>
+        </con:settings>
+        <con:encoding>UTF-8</con:encoding>
+        <con:endpoint>http://localhost:2027</con:endpoint>
+        <con:request>{
+  "username": "${#TestCase#PatientName}",
+  "context" : "${#TestCase#context}",
+  "password": "${#TestCase#PatientPwd}",
+  "name": "${#TestCase#PatientName}",
+  "email" : "${#TestCase#PatientEmail}",
+  "roles": [
+    "Patient"
+  ]
+}</con:request>
+        <con:originalUri>http://localhost/users</con:originalUri>
+        <con:assertion id="dde52a92-6cf3-4e03-b1df-0f341e4884dc" name="Valid HTTP Status Codes" type="Valid HTTP Status Codes">
+          <con:configuration>
+            <codes>201, 409</codes>
+          </con:configuration>
+        </con:assertion>
+        <con:credentials>
+          <con:authType>No Authorization</con:authType>
+        </con:credentials>
+        <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+        <con:jmsPropertyConfig/>
+        <con:parameters>
+          <entry key="BATAV-JWT-TOKEN" value="${#TestCase#authHeader}" xmlns="http://eviware.com/soapui/config"/>
+        </con:parameters>
+        <con:parameterOrder>
+          <con:entry>BATAV-JWT-TOKEN</con:entry>
+        </con:parameterOrder>
+      </con:restRequest>
+    </con:config>
+  </con:testStep>
+  <con:testStep id="8f125b2b-855f-4e86-91ef-aebbd2e43de1" name="Get All Users" type="restrequest">
+    <con:settings/>
+    <con:config methodName="Get All Users" resourcePath="/users" service="http://localhost:2027" xsi:type="con:RestRequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <con:restRequest id="7a39e681-fdfa-49b0-a3c4-76e5fd5f428d" mediaType="application/json" name="Get All Users">
+        <con:settings>
+          <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;entry key="BATAV-JWT-TOKEN" value="${#TestCase#authHeader}" xmlns="http://eviware.com/soapui/config"/></con:setting>
+        </con:settings>
+        <con:encoding>UTF-8</con:encoding>
+        <con:endpoint>http://localhost:2027</con:endpoint>
+        <con:request/>
+        <con:originalUri>http://localhost/users</con:originalUri>
+        <con:assertion id="8ddfb8a0-e88d-41f3-ac74-ff4f7b5ea6aa" name="Contains" type="Simple Contains">
+          <con:configuration>
+            <token/>
+            <ignoreCase>false</ignoreCase>
+            <useRegEx>false</useRegEx>
+          </con:configuration>
+        </con:assertion>
+        <con:credentials>
+          <con:authType>No Authorization</con:authType>
+        </con:credentials>
+        <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+        <con:jmsPropertyConfig/>
+        <con:parameters/>
+      </con:restRequest>
+    </con:config>
+  </con:testStep>
+  <con:testStep id="9a21a22d-7ffa-44d5-bea7-77f26b55e316" name="Login Doctor" type="restrequest">
+    <con:settings/>
+    <con:config methodName="login" resourcePath="/identity/login" service="http://localhost:2027" xsi:type="con:RestRequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <con:restRequest id="04a9bd3b-a23b-4080-b8bc-7d29d9f3440e" mediaType="application/json" name="Login Doctor" postQueryString="false">
+        <con:settings>
+          <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting>
+        </con:settings>
+        <con:endpoint>http://localhost:2027</con:endpoint>
+        <con:request>{
+  "username" : "${#TestCase#DoctorName}",
+  "password" : "${#TestCase#DoctorPwd}",
+  "context"  : "${#TestCase#context}"
+}</con:request>
+        <con:originalUri>http://localhost/identity/login</con:originalUri>
+        <con:assertion id="ff5110be-d6db-42a4-95cb-afb7fe62c870" name="Valid HTTP Status Codes" type="Valid HTTP Status Codes">
+          <con:configuration>
+            <codes>204</codes>
+          </con:configuration>
+        </con:assertion>
+        <con:credentials>
+          <con:authType>No Authorization</con:authType>
+        </con:credentials>
+        <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+        <con:jmsPropertyConfig/>
+        <con:parameters>
+          <entry key="login" value="" xmlns="http://eviware.com/soapui/config"/>
+        </con:parameters>
+        <con:parameterOrder>
+          <con:entry>login</con:entry>
+        </con:parameterOrder>
+      </con:restRequest>
+    </con:config>
+  </con:testStep>
+  <con:testStep id="a54b6359-1d45-4e54-9121-52a0d5097c1b" name="Refresh Token" type="restrequest">
+    <con:settings/>
+    <con:config methodName="Method 1" resourcePath="/identity/refresh" service="http://localhost:2027" xsi:type="con:RestRequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <con:restRequest id="e0962ede-609b-4d7e-86ac-a63e94db3244" mediaType="application/json" name="Refresh Token">
+        <con:settings>
+          <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;entry key="BATAV-JWT-TOKEN" value="${#TestCase#authHeader}" xmlns="http://eviware.com/soapui/config"/></con:setting>
+        </con:settings>
+        <con:encoding>UTF-8</con:encoding>
+        <con:endpoint>http://localhost:2027</con:endpoint>
+        <con:request/>
+        <con:originalUri>http://localhost/identity/refresh</con:originalUri>
+        <con:credentials>
+          <con:authType>No Authorization</con:authType>
+        </con:credentials>
+        <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+        <con:jmsPropertyConfig/>
+        <con:parameters/>
+      </con:restRequest>
+    </con:config>
+  </con:testStep>
+  <con:testStep id="f09648c7-abc8-4768-8082-cf69d2ef61f1" name="Get Token For Doctor" type="groovy">
+    <con:settings/>
+    <con:config>
+      <script>// get the header from the previous test step.
+def previousStep = testRunner.testCase.getTestStepAt(context.getCurrentStepIndex()-1).getLabel()
+log.info("Trying to get JWT token from test step: " + previousStep)
+
+def headerValue = testRunner.testCase.getTestStepByName(previousStep).httpRequest.response.responseHeaders["BATAV-JWT-TOKEN"].get(0)
+
+// log the value
+log.info("headerValue: " + headerValue)
+
+
+// set the property at the test suite level if needed in multiple testcases
+testRunner.testCase.setPropertyValue("authHeader", headerValue.toString())</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep id="6fe01e56-9094-4c0a-adb6-232bb4c2bcd8" name="Start Case LongitudinalPatientRecord" type="restrequest">
+    <con:settings/>
+    <con:config methodName="start_case" resourcePath="/cases" service="http://localhost:2027" xsi:type="con:RestRequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <con:restRequest id="f86b92f8-6a92-4c43-a124-17796e104408" mediaType="application/json" name="Start Case LongitudinalPatientRecord" postQueryString="false">
+        <con:settings>
+          <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;entry key="BATAV-JWT-TOKEN" value="${#TestCase#authHeader}" xmlns="http://eviware.com/soapui/config"/></con:setting>
+        </con:settings>
+        <con:endpoint>http://localhost:2027</con:endpoint>
+        <con:request>{
+	"definition": "LongitudinalPatientRecord.xml",
+	"name": "LongitudinalPatientRecord",
+	"inputs": {
+		"Patient": {
+			"Name": "Test Name field 1",
+			"Gender": "Male",
+			"DateOfBirth": "2000-01-01",
+			"Address": "testing address , India",
+			"ID": "ID-12345",
+			"Active": true,
+			"Telecom": "+91-9876543210",
+			"Email": "test@email.com"
+		}
+	},
+	"caseTeam": {
+		"members": []
+	}
+}</con:request>
+        <con:originalUri>http://localhost/cases</con:originalUri>
+        <con:assertion id="01c6fd84-67e1-494d-b5ff-b629ad5a95d5" name="Valid HTTP Status Codes" type="Valid HTTP Status Codes">
+          <con:configuration>
+            <codes>200</codes>
+          </con:configuration>
+        </con:assertion>
+        <con:credentials>
+          <con:authType>No Authorization</con:authType>
+        </con:credentials>
+        <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+        <con:jmsPropertyConfig/>
+        <con:parameters/>
+        <con:parameterOrder/>
+      </con:restRequest>
+    </con:config>
+  </con:testStep>
+  <con:testStep id="4b4ce302-c76e-4e9f-8f00-93d04e2e7fc4" name="get caseInstanceId" type="transfer">
+    <con:settings/>
+    <con:config xsi:type="con:PropertyTransfersStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <con:transfers entitize="false" failOnError="true" ignoreEmpty="false" setNullOnMissingSource="true" transferChildNodes="false" transferTextContent="false" transferToAll="false">
+        <con:name>caseInstanceId</con:name>
+        <con:sourceType>Response</con:sourceType>
+        <con:sourceStep>Start Case LongitudinalPatientRecord</con:sourceStep>
+        <con:sourcePath>$.caseInstanceId</con:sourcePath>
+        <con:targetType>caseInstanceId</con:targetType>
+        <con:targetStep>#TestCase#</con:targetStep>
+        <con:type>JSONPATH</con:type>
+        <con:targetTransferType>JSONPATH</con:targetTransferType>
+        <con:upgraded>true</con:upgraded>
+      </con:transfers>
+    </con:config>
+  </con:testStep>
+  <con:testStep id="dba54905-b0e1-497c-9a7d-9a18361a7759" name="Get last modified header for case LD" type="groovy">
+    <con:settings/>
+    <con:config>
+      <script>// get the header from the previous test step.
+def previousStepNumber = context.getCurrentStepIndex()-1
+def headerValue = null
+
+while (previousStepNumber >= 0)
+{
+  def previousStep = testRunner.testCase.getTestStepAt(previousStepNumber)
+  try
+  {
+    headerValue = previousStep.httpRequest.response.responseHeaders["Case-Last-Modified"].get(0)
+    break;
+  }
+  catch(ignorable)
+  {
+  }
+  previousStepNumber--
+
+}
+
+log.info("Case-Last-Modified: " + headerValue.toString())
+// set the property at the test suite level if needed in multiple testcases
+testRunner.testCase.setPropertyValue("Case-Last-Modified", headerValue.toString())</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep id="12424b0e-9401-4cd1-a30e-7ff41095ab4a" name="GetCase of LongitudinalPatientRecord" type="restrequest">
+    <con:settings/>
+    <con:config methodName="GetCase" resourcePath="/cases/{caseInstanceId}" service="http://localhost:2027" xsi:type="con:RestRequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <con:restRequest id="c976c693-eed6-4760-ba39-3e3aab071d25" mediaType="application/json" name="GetCase of LongitudinalPatientRecord">
+        <con:settings>
+          <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment xmlns:con="http://eviware.com/soapui/config">
+  &lt;con:entry key="BATAV-JWT-TOKEN" value="${#TestCase#authHeader}"/>
+  &lt;con:entry key="Case-Last-Modified" value="${#TestCase#Case-Last-Modified}"/>
+&lt;/xml-fragment></con:setting>
+        </con:settings>
+        <con:encoding>UTF-8</con:encoding>
+        <con:endpoint>http://localhost:2027</con:endpoint>
+        <con:request/>
+        <con:originalUri>http://localhost/cases/caseInstanceId</con:originalUri>
+        <con:assertion id="8005ea66-3f4b-41ba-bd83-f3b303bc1fdd" name="Valid HTTP Status Codes" type="Valid HTTP Status Codes">
+          <con:configuration>
+            <codes>200</codes>
+          </con:configuration>
+        </con:assertion>
+        <con:credentials>
+          <con:authType>No Authorization</con:authType>
+        </con:credentials>
+        <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+        <con:jmsPropertyConfig/>
+        <con:parameters>
+          <entry key="caseInstanceId" value="${#TestCase#caseInstanceId}" xmlns="http://eviware.com/soapui/config"/>
+        </con:parameters>
+        <con:parameterOrder>
+          <con:entry>caseInstanceId</con:entry>
+        </con:parameterOrder>
+      </con:restRequest>
+    </con:config>
+  </con:testStep>
+  <con:testStep id="b2d3dd11-e891-4c71-a78c-2af504aed8a3" name="getSubCaseCaseID" type="transfer">
+    <con:settings/>
+    <con:config xsi:type="con:PropertyTransfersStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <con:transfers entitize="false" failOnError="true" ignoreEmpty="false" setNullOnMissingSource="true" transferChildNodes="false" transferTextContent="true" transferToAll="false">
+        <con:name>subCaseId</con:name>
+        <con:sourceType>Response</con:sourceType>
+        <con:sourceStep>GetCase of LongitudinalPatientRecord</con:sourceStep>
+        <con:sourcePath>$..[?(@name=='Cancer Diagnosis')].id[0]</con:sourcePath>
+        <con:targetType>subCaseId</con:targetType>
+        <con:targetStep>#TestCase#</con:targetStep>
+        <con:type>JSONPATH</con:type>
+        <con:targetTransferType>JSONPATH</con:targetTransferType>
+        <con:upgraded>true</con:upgraded>
+      </con:transfers>
+    </con:config>
+  </con:testStep>
+  <con:testStep id="52b55966-7af5-4ce1-b30b-5c169be915d2" name="Get Discretionary Items LD" type="restrequest">
+    <con:settings/>
+    <con:config methodName="GetDiscretionaryItems" resourcePath="/cases/{caseInstanceId}/discretionaryitems" service="http://localhost:2027" xsi:type="con:RestRequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <con:restRequest id="934b2c6a-98ce-48cd-9ded-a360826ab9af" mediaType="application/json" name="Get Discretionary Items LD">
+        <con:settings>
+          <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment xmlns:con="http://eviware.com/soapui/config">
+  &lt;con:entry key="BATAV-JWT-TOKEN" value="${#TestCase#authHeader}"/>
+  &lt;con:entry key="Case-Last-Modified" value="${#TestCase#Case-Last-Modified}"/>
+&lt;/xml-fragment></con:setting>
+        </con:settings>
+        <con:encoding>UTF-8</con:encoding>
+        <con:endpoint>http://localhost:2027</con:endpoint>
+        <con:request/>
+        <con:originalUri>http://localhost/cases/5b4c6e04_f6be_4b81_b0df_64086a9cb5e0/discretionaryitems</con:originalUri>
+        <con:assertion id="705f6bf6-1b49-4d81-b03a-e9f9df57c4c0" name="Valid HTTP Status Codes" type="Valid HTTP Status Codes">
+          <con:configuration>
+            <codes>200</codes>
+          </con:configuration>
+        </con:assertion>
+        <con:credentials>
+          <con:authType>No Authorization</con:authType>
+        </con:credentials>
+        <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+        <con:jmsPropertyConfig/>
+        <con:parameters>
+          <entry key="caseInstanceId" value="${#TestCase#caseInstanceId}" xmlns="http://eviware.com/soapui/config"/>
+        </con:parameters>
+        <con:parameterOrder>
+          <con:entry>caseInstanceId</con:entry>
+        </con:parameterOrder>
+      </con:restRequest>
+    </con:config>
+  </con:testStep>
+  <con:testStep id="9099706f-cdd1-47b7-ac1a-8a72bd6cb8c3" name="Discretionay item plan JSON" type="groovy">
+    <con:settings/>
+    <con:config>
+      <script>// get the header from the previous test step.
+/*def jsonSlurper =  new groovy.json.JsonSlurper()
+def obj = jsonSlurper.parseText()
+
+log.info(obj.discretionaryItems[0].id)
+*/
+
+import groovy.json.JsonSlurper
+
+def responseJson = testRunner.testCase.getTestStepByName("Get Discretionary Items LD").getPropertyValue("response")
+def slurper = new JsonSlurper().parseText(responseJson)
+
+for( def DIs : slurper.discretionaryItems){
+	if((DIs.name).equalsIgnoreCase("Edit Patient Details")){
+		testRunner.testCase.setPropertyValue("discretionaryItemsName", DIs.name)
+		testRunner.testCase.setPropertyValue("discretionaryItemsDefinitionId", DIs.id)
+		testRunner.testCase.setPropertyValue("discretionaryItemsParentId", DIs.parentId)
+	//	testRunner.testCase.setPropertyValue("discretionaryItemsplanItemId", DIs)
+	log.info(DIs.name +" --- "+ DIs.id +" --- "+ DIs.parentId)
+	}
+}
+//def testCaseProperty = testRunner.testCase.getPropertyValue("workspace_id")
+
+
+//testRunner.testCase.setPropertyValue("workspace_id", slurper.discretionaryItems[0].id</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep id="79e624be-958d-4f81-8381-4926a5dec394" name="Plan Patient Discretionary Items" type="restrequest">
+    <con:settings/>
+    <con:config methodName="GetDiscretionaryItems" resourcePath="/cases/{caseInstanceId}/discretionaryitems/plan" service="http://localhost:2027" xsi:type="con:RestRequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <con:restRequest id="e7c63fc3-857a-42e5-a00b-589bc499cd37" mediaType="application/json" name="Plan Patient Discretionary Items" postQueryString="false">
+        <con:settings>
+          <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;entry key="BATAV-JWT-TOKEN" value="${#TestCase#authHeader}" xmlns="http://eviware.com/soapui/config"/></con:setting>
+        </con:settings>
+        <con:endpoint>http://localhost:2027</con:endpoint>
+        <con:request>{
+  "name": "${#TestCase#discretionaryItemsName}",
+  "definitionId": "${#TestCase#discretionaryItemsDefinitionId}",
+  "parentId": "${#TestCase#discretionaryItemsParentId}"
+}</con:request>
+        <con:originalUri>http://localhost/cases/%7B%23TestSuite%23caseInstanceId%7D/discretionaryitems</con:originalUri>
+        <con:assertion id="f1987641-24a8-4db3-a9c4-3e8fa6265b2b" name="Valid HTTP Status Codes" type="Valid HTTP Status Codes">
+          <con:configuration>
+            <codes>200</codes>
+          </con:configuration>
+        </con:assertion>
+        <con:credentials>
+          <con:authType>No Authorization</con:authType>
+        </con:credentials>
+        <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+        <con:jmsPropertyConfig/>
+        <con:parameters>
+          <con:entry key="caseInstanceId" value="${#TestCase#caseInstanceId}"/>
+          <con:entry key="transition" value="plan"/>
+        </con:parameters>
+        <con:parameterOrder>
+          <con:entry>caseInstanceId</con:entry>
+          <con:entry>transition</con:entry>
+        </con:parameterOrder>
+      </con:restRequest>
+    </con:config>
+  </con:testStep>
+  <con:testStep id="f672d9c9-3bf0-494b-97cb-731bbafca9eb" name="2000" type="delay">
+    <con:settings/>
+    <con:config>
+      <delay>2000</delay>
+    </con:config>
+  </con:testStep>
+  <con:testStep id="182d27c8-810b-47d4-bc12-9f6be7a94f0b" name="Get All Tasks By CaseInstanceId" type="restrequest">
+    <con:settings/>
+    <con:config methodName="Get All Tasks By CaseInstance" resourcePath="/tasks" service="http://localhost:2027" xsi:type="con:RestRequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <con:restRequest id="c976c693-eed6-4760-ba39-3e3aab071d25" mediaType="application/json" name="Get All Tasks By CaseInstanceId">
+        <con:settings>
+          <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment xmlns:con="http://eviware.com/soapui/config">
+  &lt;con:entry key="BATAV-JWT-TOKEN" value="${#TestCase#authHeader}"/>
+  &lt;con:entry key="Case-Last-Modified" value="${#TestCase#Case-Last-Modified}"/>
+&lt;/xml-fragment></con:setting>
+        </con:settings>
+        <con:encoding>UTF-8</con:encoding>
+        <con:endpoint>http://localhost:2027</con:endpoint>
+        <con:request/>
+        <con:originalUri>http://localhost/cases/caseInstanceId</con:originalUri>
+        <con:assertion id="bcbbb221-27af-441b-8605-48ff3f4f2b69" name="JsonPath Match" type="JsonPath Match">
+          <con:configuration>
+            <path>$..[?(@taskName == 'Edit Patient Details')].planState[0]</path>
+            <content>Active</content>
+            <allowWildcards>false</allowWildcards>
+            <ignoreNamspaceDifferences>false</ignoreNamspaceDifferences>
+            <ignoreComments>false</ignoreComments>
+          </con:configuration>
+        </con:assertion>
+        <con:credentials>
+          <con:authType>No Authorization</con:authType>
+        </con:credentials>
+        <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+        <con:jmsPropertyConfig/>
+        <con:parameters>
+          <entry key="caseInstanceId" value="${#TestCase#caseInstanceId}" xmlns="http://eviware.com/soapui/config"/>
+        </con:parameters>
+        <con:parameterOrder/>
+      </con:restRequest>
+    </con:config>
+  </con:testStep>
+  <con:testStep id="eea31e99-83cd-40db-8cd0-832852941b4e" name="get taskId for Edit Patient Details" type="transfer">
+    <con:settings/>
+    <con:config xsi:type="con:PropertyTransfersStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <con:transfers entitize="false" failOnError="true" ignoreEmpty="false" setNullOnMissingSource="true" transferChildNodes="false" transferTextContent="true" transferToAll="false">
+        <con:name>taskId</con:name>
+        <con:sourceType>Response</con:sourceType>
+        <con:sourceStep>Get All Tasks By CaseInstanceId</con:sourceStep>
+        <con:sourcePath>$..[?(@taskName=='Edit Patient Details')].id[0]</con:sourcePath>
+        <con:targetType>taskId</con:targetType>
+        <con:targetStep>#TestCase#</con:targetStep>
+        <con:type>JSONPATH</con:type>
+        <con:targetTransferType>JSONPATH</con:targetTransferType>
+        <con:upgraded>true</con:upgraded>
+      </con:transfers>
+    </con:config>
+  </con:testStep>
+  <con:testStep id="329499e2-ae36-4792-a078-398c8e5a388d" name="ClaimTask Edit Patient Details" type="restrequest">
+    <con:settings/>
+    <con:config methodName="Method 1" resourcePath="/tasks/{taskId}/{action}" service="http://localhost:2027" xsi:type="con:RestRequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <con:restRequest id="657b2b47-7588-41d1-a9fa-21df31c20f04" mediaType="application/json" name="ClaimTask Edit Patient Details" postQueryString="false">
+        <con:settings>
+          <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;entry key="BATAV-JWT-TOKEN" value="${#TestCase#authHeader}" xmlns="http://eviware.com/soapui/config"/></con:setting>
+        </con:settings>
+        <con:encoding>UTF-8</con:encoding>
+        <con:endpoint>http://localhost:2027</con:endpoint>
+        <con:request/>
+        <con:originalUri>http://localhost/tasks/4d7470d3_7868_483d_9e56_2b08570c3896/claim</con:originalUri>
+        <con:assertion id="43f04286-3e6e-4ffc-960a-06e279fc2642" name="Valid HTTP Status Codes" type="Valid HTTP Status Codes">
+          <con:configuration>
+            <codes>202</codes>
+          </con:configuration>
+        </con:assertion>
+        <con:credentials>
+          <con:authType>No Authorization</con:authType>
+        </con:credentials>
+        <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+        <con:jmsPropertyConfig/>
+        <con:parameters>
+          <con:entry key="taskId" value="${#TestCase#taskId}"/>
+          <con:entry key="action" value="claim"/>
+        </con:parameters>
+        <con:parameterOrder>
+          <con:entry>taskId</con:entry>
+          <con:entry>action</con:entry>
+        </con:parameterOrder>
+      </con:restRequest>
+    </con:config>
+  </con:testStep>
+  <con:testStep id="246e831a-2181-488e-b544-584b75f239bc" name="Get last modified header after Claim Task" type="groovy">
+    <con:settings/>
+    <con:config>
+      <script>// get the header from the previous test step.
+def previousStepNumber = context.getCurrentStepIndex()-1
+def headerValue = null
+
+while (previousStepNumber >= 0)
+{
+  def previousStep = testRunner.testCase.getTestStepAt(previousStepNumber)
+  try
+  {
+    headerValue = previousStep.httpRequest.response.responseHeaders["Case-Last-Modified"].get(0)
+    break;
+  }
+  catch(ignorable)
+  {
+  }
+  previousStepNumber--
+
+}
+
+log.info("Case-Last-Modified: " + headerValue.toString())
+// set the property at the test suite level if needed in multiple testcases
+testRunner.testCase.setPropertyValue("Case-Last-Modified", headerValue.toString())</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep id="fe09c832-56f8-4829-ad5f-e409342873ee" name="CompleteTask Edit Patient Details" type="restrequest">
+    <con:settings/>
+    <con:config methodName="Method 1" resourcePath="/tasks/{taskId}/{transition}" service="http://localhost:2027" xsi:type="con:RestRequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <con:restRequest id="1367a110-8981-4ec6-b978-9935236293a8" mediaType="application/json" name="CompleteTask Edit Patient Details" postQueryString="false">
+        <con:settings>
+          <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment xmlns:con="http://eviware.com/soapui/config">
+  &lt;con:entry key="BATAV-JWT-TOKEN" value="${#TestCase#authHeader}"/>
+  &lt;con:entry key="Case-Last-Modified" value="${#TestCase#Case-Last-Modified}"/>
+&lt;/xml-fragment></con:setting>
+        </con:settings>
+        <con:endpoint>http://localhost:2027</con:endpoint>
+        <con:request>{"Patient": {
+			"Name": "Test Name field edit",
+			"Gender": "Male",
+			"DateOfBirth": "2000-01-01",
+			"Address": "testing address , India",
+			"ID": "ID-12345",
+			"Active": true,
+			"Telecom": "+91-9876543210",
+			"Email": "test@email.com"
+		}
+}</con:request>
+        <con:originalUri>http://localhost/tasks/7fca29a4_6382_40fb_be13_5731c8928769/complete</con:originalUri>
+        <con:assertion id="0053aee3-27f6-4ba5-b641-faf46147ee5f" name="Valid HTTP Status Codes" type="Valid HTTP Status Codes">
+          <con:configuration>
+            <codes>202</codes>
+          </con:configuration>
+        </con:assertion>
+        <con:credentials>
+          <con:authType>No Authorization</con:authType>
+        </con:credentials>
+        <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+        <con:jmsPropertyConfig/>
+        <con:parameters>
+          <con:entry key="taskId" value="${#TestCase#taskId}"/>
+          <con:entry key="transition" value="complete"/>
+        </con:parameters>
+      </con:restRequest>
+    </con:config>
+  </con:testStep>
+  <con:testStep id="51a5f685-1fe6-443b-bddb-4e7f2c8d7688" name="Get last modified header after Complete Task" type="groovy">
+    <con:settings/>
+    <con:config>
+      <script>// get the header from the previous test step.
+def previousStepNumber = context.getCurrentStepIndex()-1
+def headerValue = null
+
+while (previousStepNumber >= 0)
+{
+  def previousStep = testRunner.testCase.getTestStepAt(previousStepNumber)
+  try
+  {
+    headerValue = previousStep.httpRequest.response.responseHeaders["Case-Last-Modified"].get(0)
+    break;
+  }
+  catch(ignorable)
+  {
+  }
+  previousStepNumber--
+
+}
+
+log.info("Case-Last-Modified: " + headerValue.toString())
+// set the property at the test suite level if needed in multiple testcases
+testRunner.testCase.setPropertyValue("Case-Last-Modified", headerValue.toString())</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep id="f32c96ad-e82f-4949-b312-f170b10fdc35" name="GetCase Cancer Diagnosis" type="restrequest">
+    <con:settings/>
+    <con:config methodName="GetCase" resourcePath="/cases/{caseInstanceId}" service="http://localhost:2027" xsi:type="con:RestRequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <con:restRequest id="c976c693-eed6-4760-ba39-3e3aab071d25" mediaType="application/json" name="GetCase Cancer Diagnosis">
+        <con:settings>
+          <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment xmlns:con="http://eviware.com/soapui/config">
+  &lt;con:entry key="BATAV-JWT-TOKEN" value="${#TestCase#authHeader}"/>
+  &lt;con:entry key="Case-Last-Modified" value="${#TestCase#Case-Last-Modified}"/>
+&lt;/xml-fragment></con:setting>
+        </con:settings>
+        <con:encoding>UTF-8</con:encoding>
+        <con:endpoint>http://localhost:2027</con:endpoint>
+        <con:request/>
+        <con:originalUri>http://localhost/cases/caseInstanceId</con:originalUri>
+        <con:assertion id="8005ea66-3f4b-41ba-bd83-f3b303bc1fdd" name="Valid HTTP Status Codes" type="Valid HTTP Status Codes">
+          <con:configuration>
+            <codes>200</codes>
+          </con:configuration>
+        </con:assertion>
+        <con:credentials>
+          <con:authType>No Authorization</con:authType>
+        </con:credentials>
+        <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+        <con:jmsPropertyConfig/>
+        <con:parameters>
+          <entry key="caseInstanceId" value="${#TestCase#subCaseId}" xmlns="http://eviware.com/soapui/config"/>
+        </con:parameters>
+        <con:parameterOrder>
+          <con:entry>caseInstanceId</con:entry>
+        </con:parameterOrder>
+      </con:restRequest>
+    </con:config>
+  </con:testStep>
+  <con:testStep id="e389a1d4-d3cb-446f-a3ba-3be8469f9874" name="get caseInstanceId of Appointment" type="transfer">
+    <con:settings/>
+    <con:config xsi:type="con:PropertyTransfersStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <con:transfers entitize="false" failOnError="true" ignoreEmpty="false" setNullOnMissingSource="true" transferChildNodes="false" transferTextContent="false" transferToAll="false">
+        <con:name>caseInstanceId</con:name>
+        <con:sourceType>Response</con:sourceType>
+        <con:sourceStep>GetCase Cancer Diagnosis</con:sourceStep>
+        <con:sourcePath>$..[?(@name=='Appointment')].id[0]</con:sourcePath>
+        <con:targetType>subSubCaseInstanceId</con:targetType>
+        <con:targetStep>#TestCase#</con:targetStep>
+        <con:type>JSONPATH</con:type>
+        <con:targetTransferType>JSONPATH</con:targetTransferType>
+        <con:upgraded>true</con:upgraded>
+      </con:transfers>
+    </con:config>
+  </con:testStep>
+  <con:testStep id="029cb59c-9c4a-4a09-aab6-a923440770ae" name="GetCase Appointment" type="restrequest">
+    <con:settings/>
+    <con:config methodName="GetCase" resourcePath="/cases/{caseInstanceId}" service="http://localhost:2027" xsi:type="con:RestRequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <con:restRequest id="c976c693-eed6-4760-ba39-3e3aab071d25" mediaType="application/json" name="GetCase Appointment">
+        <con:settings>
+          <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment xmlns:con="http://eviware.com/soapui/config">
+  &lt;con:entry key="BATAV-JWT-TOKEN" value="${#TestCase#authHeader}"/>
+  &lt;con:entry key="Case-Last-Modified" value="${#TestCase#Case-Last-Modified}"/>
+&lt;/xml-fragment></con:setting>
+        </con:settings>
+        <con:encoding>UTF-8</con:encoding>
+        <con:endpoint>http://localhost:2027</con:endpoint>
+        <con:request/>
+        <con:originalUri>http://localhost/cases/caseInstanceId</con:originalUri>
+        <con:assertion id="8005ea66-3f4b-41ba-bd83-f3b303bc1fdd" name="Valid HTTP Status Codes" type="Valid HTTP Status Codes">
+          <con:configuration>
+            <codes>200</codes>
+          </con:configuration>
+        </con:assertion>
+        <con:credentials>
+          <con:authType>No Authorization</con:authType>
+        </con:credentials>
+        <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+        <con:jmsPropertyConfig/>
+        <con:parameters>
+          <entry key="caseInstanceId" value="${#TestCase#subSubCaseInstanceId}" xmlns="http://eviware.com/soapui/config"/>
+        </con:parameters>
+        <con:parameterOrder>
+          <con:entry>caseInstanceId</con:entry>
+        </con:parameterOrder>
+      </con:restRequest>
+    </con:config>
+  </con:testStep>
+  <con:testStep id="727efcd3-59f2-4683-8935-46f2323466b7" name="Get All Tasks By CaseInstanceId CD" type="restrequest">
+    <con:settings/>
+    <con:config methodName="Get All Tasks By CaseInstance" resourcePath="/tasks" service="http://localhost:2027" xsi:type="con:RestRequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <con:restRequest id="c976c693-eed6-4760-ba39-3e3aab071d25" mediaType="application/json" name="Get All Tasks By CaseInstanceId CD">
+        <con:settings>
+          <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment xmlns:con="http://eviware.com/soapui/config">
+  &lt;con:entry key="BATAV-JWT-TOKEN" value="${#TestCase#authHeader}"/>
+  &lt;con:entry key="Case-Last-Modified" value="${#TestCase#Case-Last-Modified}"/>
+&lt;/xml-fragment></con:setting>
+        </con:settings>
+        <con:encoding>UTF-8</con:encoding>
+        <con:endpoint>http://localhost:2027</con:endpoint>
+        <con:request/>
+        <con:originalUri>http://localhost/cases/caseInstanceId</con:originalUri>
+        <con:assertion id="7b42ee5e-7fb7-4d28-9f2c-42db9d00ee10" name="Valid HTTP Status Codes" type="Valid HTTP Status Codes">
+          <con:configuration>
+            <codes>200</codes>
+          </con:configuration>
+        </con:assertion>
+        <con:credentials>
+          <con:authType>No Authorization</con:authType>
+        </con:credentials>
+        <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+        <con:jmsPropertyConfig/>
+        <con:parameters>
+          <entry key="caseInstanceId" value="${#TestCase#subSubCaseInstanceId}" xmlns="http://eviware.com/soapui/config"/>
+        </con:parameters>
+        <con:parameterOrder/>
+      </con:restRequest>
+    </con:config>
+  </con:testStep>
+  <con:testStep id="7d515af9-9643-4f2b-89bc-9d94bff291c8" name="get taskId for CD Appointment" type="transfer">
+    <con:settings/>
+    <con:config xsi:type="con:PropertyTransfersStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <con:transfers entitize="false" failOnError="true" ignoreEmpty="false" setNullOnMissingSource="true" transferChildNodes="false" transferTextContent="true" transferToAll="false">
+        <con:name>taskId</con:name>
+        <con:sourceType>Response</con:sourceType>
+        <con:sourceStep>Get All Tasks By CaseInstanceId CD</con:sourceStep>
+        <con:sourcePath>$..[?(@taskName=='Plan Appointment')].id[0]</con:sourcePath>
+        <con:targetType>taskId</con:targetType>
+        <con:targetStep>#TestCase#</con:targetStep>
+        <con:type>JSONPATH</con:type>
+        <con:targetTransferType>JSONPATH</con:targetTransferType>
+        <con:upgraded>true</con:upgraded>
+      </con:transfers>
+    </con:config>
+  </con:testStep>
+  <con:testStep id="b23370af-8dcd-4dda-9d9f-1e8eec3d442e" name="ClaimTask CD planAppointment" type="restrequest">
+    <con:settings/>
+    <con:config methodName="Method 1" resourcePath="/tasks/{taskId}/{action}" service="http://localhost:2027" xsi:type="con:RestRequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <con:restRequest id="657b2b47-7588-41d1-a9fa-21df31c20f04" mediaType="application/json" name="ClaimTask CD planAppointment" postQueryString="false">
+        <con:settings>
+          <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;entry key="BATAV-JWT-TOKEN" value="${#TestCase#authHeader}" xmlns="http://eviware.com/soapui/config"/></con:setting>
+        </con:settings>
+        <con:encoding>UTF-8</con:encoding>
+        <con:endpoint>http://localhost:2027</con:endpoint>
+        <con:request/>
+        <con:originalUri>http://localhost/tasks/4d7470d3_7868_483d_9e56_2b08570c3896/claim</con:originalUri>
+        <con:assertion id="43f04286-3e6e-4ffc-960a-06e279fc2642" name="Valid HTTP Status Codes" type="Valid HTTP Status Codes">
+          <con:configuration>
+            <codes>202</codes>
+          </con:configuration>
+        </con:assertion>
+        <con:credentials>
+          <con:authType>No Authorization</con:authType>
+        </con:credentials>
+        <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+        <con:jmsPropertyConfig/>
+        <con:parameters>
+          <con:entry key="taskId" value="${#TestCase#taskId}"/>
+          <con:entry key="action" value="claim"/>
+        </con:parameters>
+        <con:parameterOrder>
+          <con:entry>taskId</con:entry>
+          <con:entry>action</con:entry>
+        </con:parameterOrder>
+      </con:restRequest>
+    </con:config>
+  </con:testStep>
+  <con:testStep id="728ca05d-210d-430e-81d9-44db48b12ffc" name="Get last modified header for case Appointment" type="groovy">
+    <con:settings/>
+    <con:config>
+      <script>// get the header from the previous test step.
+def previousStepNumber = context.getCurrentStepIndex()-1
+def headerValue = null
+
+while (previousStepNumber >= 0)
+{
+  def previousStep = testRunner.testCase.getTestStepAt(previousStepNumber)
+  try
+  {
+    headerValue = previousStep.httpRequest.response.responseHeaders["Case-Last-Modified"].get(0)
+    break;
+  }
+  catch(ignorable)
+  {
+  }
+  previousStepNumber--
+
+}
+
+log.info("Case-Last-Modified: " + headerValue.toString())
+// set the property at the test suite level if needed in multiple testcases
+testRunner.testCase.setPropertyValue("Case-Last-Modified", headerValue.toString())</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep id="473a5b06-d68b-4fb5-ad96-4d48b22bbc0b" name="CompleteTask planAppointment" type="restrequest">
+    <con:settings/>
+    <con:config methodName="Method 1" resourcePath="/tasks/{taskId}/{transition}" service="http://localhost:2027" xsi:type="con:RestRequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <con:restRequest id="1367a110-8981-4ec6-b978-9935236293a8" mediaType="application/json" name="CompleteTask planAppointment" postQueryString="false">
+        <con:settings>
+          <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment xmlns:con="http://eviware.com/soapui/config">
+  &lt;con:entry key="BATAV-JWT-TOKEN" value="${#TestCase#authHeader}"/>
+  &lt;con:entry key="Case-Last-Modified" value="${#TestCase#Case-Last-Modified}"/>
+&lt;/xml-fragment></con:setting>
+        </con:settings>
+        <con:endpoint>http://localhost:2027</con:endpoint>
+        <con:request>{
+    "Appointment" : {
+      "EndTime" : "16:56:50",
+      "EndDate" : "2019-06-14",
+      "StartTime" : "04:56:42",
+      "ServiceType" : "Service Type",
+      "StartDate" : "2019-06-13",
+      "ReasonCode" : "ReasonCode",
+      "Status" : "Status",
+      "AppointmentType" : "AppointmentType",
+      "AppointmentID" : "App-ID",
+      "Specialty" : "Radiology",
+      "CreatedBy" : "doalk",
+      "Comment" : "testing"
+    }
+  }</con:request>
+        <con:originalUri>http://localhost/tasks/7fca29a4_6382_40fb_be13_5731c8928769/complete</con:originalUri>
+        <con:assertion id="0053aee3-27f6-4ba5-b641-faf46147ee5f" name="Valid HTTP Status Codes" type="Valid HTTP Status Codes">
+          <con:configuration>
+            <codes>202</codes>
+          </con:configuration>
+        </con:assertion>
+        <con:credentials>
+          <con:authType>No Authorization</con:authType>
+        </con:credentials>
+        <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+        <con:jmsPropertyConfig/>
+        <con:parameters>
+          <con:entry key="taskId" value="${#TestCase#taskId}"/>
+          <con:entry key="transition" value="complete"/>
+        </con:parameters>
+      </con:restRequest>
+    </con:config>
+  </con:testStep>
+  <con:testStep id="9c9c259c-0800-4edb-a160-696c74c2e3e8" name="2000 1" type="delay">
+    <con:settings/>
+    <con:config>
+      <delay>1000</delay>
+    </con:config>
+  </con:testStep>
+  <con:testStep id="afc0a030-9b8a-45c4-8a7f-2ad80cfabd53" name="Get All Tasks of Cancer Diagonsis" type="restrequest">
+    <con:settings/>
+    <con:config methodName="Get All Tasks By CaseInstance" resourcePath="/tasks" service="http://localhost:2027" xsi:type="con:RestRequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <con:restRequest id="c976c693-eed6-4760-ba39-3e3aab071d25" mediaType="application/json" name="Get All Tasks of Cancer Diagonsis">
+        <con:settings>
+          <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment xmlns:con="http://eviware.com/soapui/config">
+  &lt;con:entry key="BATAV-JWT-TOKEN" value="${#TestCase#authHeader}"/>
+  &lt;con:entry key="Case-Last-Modified" value="${#TestCase#Case-Last-Modified}"/>
+&lt;/xml-fragment></con:setting>
+        </con:settings>
+        <con:encoding>UTF-8</con:encoding>
+        <con:endpoint>http://localhost:2027</con:endpoint>
+        <con:request/>
+        <con:originalUri>http://localhost/cases/caseInstanceId</con:originalUri>
+        <con:assertion id="7b42ee5e-7fb7-4d28-9f2c-42db9d00ee10" name="Valid HTTP Status Codes" type="Valid HTTP Status Codes">
+          <con:configuration>
+            <codes>200</codes>
+          </con:configuration>
+        </con:assertion>
+        <con:credentials>
+          <con:authType>No Authorization</con:authType>
+        </con:credentials>
+        <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+        <con:jmsPropertyConfig/>
+        <con:parameters>
+          <entry key="caseInstanceId" value="${#TestCase#subCaseId}" xmlns="http://eviware.com/soapui/config"/>
+        </con:parameters>
+        <con:parameterOrder/>
+      </con:restRequest>
+    </con:config>
+  </con:testStep>
+  <con:testStep id="b8df7d77-3b32-4dfc-bafe-74d8f48d783e" name="get taskId for CD Encounter" type="transfer">
+    <con:settings/>
+    <con:config xsi:type="con:PropertyTransfersStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <con:transfers entitize="false" failOnError="true" ignoreEmpty="false" setNullOnMissingSource="true" transferChildNodes="false" transferTextContent="true" transferToAll="false">
+        <con:name>taskId</con:name>
+        <con:sourceType>Response</con:sourceType>
+        <con:sourceStep>Get All Tasks of Cancer Diagonsis</con:sourceStep>
+        <con:sourcePath>$..[?(@taskName=='Encounter')].id[0]</con:sourcePath>
+        <con:targetType>taskId</con:targetType>
+        <con:targetStep>#TestCase#</con:targetStep>
+        <con:type>JSONPATH</con:type>
+        <con:targetTransferType>JSONPATH</con:targetTransferType>
+        <con:upgraded>true</con:upgraded>
+      </con:transfers>
+    </con:config>
+  </con:testStep>
+  <con:testStep id="d50fca62-4c8f-478d-93ac-0936f807937a" name="ClaimTask CD Encounter" type="restrequest">
+    <con:settings/>
+    <con:config methodName="Method 1" resourcePath="/tasks/{taskId}/{action}" service="http://localhost:2027" xsi:type="con:RestRequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <con:restRequest id="657b2b47-7588-41d1-a9fa-21df31c20f04" mediaType="application/json" name="ClaimTask CD Encounter" postQueryString="false">
+        <con:settings>
+          <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;entry key="BATAV-JWT-TOKEN" value="${#TestCase#authHeader}" xmlns="http://eviware.com/soapui/config"/></con:setting>
+        </con:settings>
+        <con:encoding>UTF-8</con:encoding>
+        <con:endpoint>http://localhost:2027</con:endpoint>
+        <con:request/>
+        <con:originalUri>http://localhost/tasks/4d7470d3_7868_483d_9e56_2b08570c3896/claim</con:originalUri>
+        <con:assertion id="43f04286-3e6e-4ffc-960a-06e279fc2642" name="Valid HTTP Status Codes" type="Valid HTTP Status Codes">
+          <con:configuration>
+            <codes>202</codes>
+          </con:configuration>
+        </con:assertion>
+        <con:credentials>
+          <con:authType>No Authorization</con:authType>
+        </con:credentials>
+        <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+        <con:jmsPropertyConfig/>
+        <con:parameters>
+          <con:entry key="taskId" value="${#TestCase#taskId}"/>
+          <con:entry key="action" value="claim"/>
+        </con:parameters>
+        <con:parameterOrder>
+          <con:entry>taskId</con:entry>
+          <con:entry>action</con:entry>
+        </con:parameterOrder>
+      </con:restRequest>
+    </con:config>
+  </con:testStep>
+  <con:testStep id="ff48a625-da88-42c4-98a7-4de42268e226" name="Get last modified header for case CD" type="groovy">
+    <con:settings/>
+    <con:config>
+      <script>// get the header from the previous test step.
+def previousStepNumber = context.getCurrentStepIndex()-1
+def headerValue = null
+
+while (previousStepNumber >= 0)
+{
+  def previousStep = testRunner.testCase.getTestStepAt(previousStepNumber)
+  try
+  {
+    headerValue = previousStep.httpRequest.response.responseHeaders["Case-Last-Modified"].get(0)
+    break;
+  }
+  catch(ignorable)
+  {
+  }
+  previousStepNumber--
+
+}
+
+log.info("Case-Last-Modified: " + headerValue.toString())
+// set the property at the test suite level if needed in multiple testcases
+testRunner.testCase.setPropertyValue("Case-Last-Modified", headerValue.toString())</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep id="97ff5824-06f5-4c4c-8f8b-3e2b412d43aa" name="CompleteTask Encounter" type="restrequest">
+    <con:settings/>
+    <con:config methodName="Method 1" resourcePath="/tasks/{taskId}/{transition}" service="http://localhost:2027" xsi:type="con:RestRequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <con:restRequest id="1367a110-8981-4ec6-b978-9935236293a8" mediaType="application/json" name="CompleteTask Encounter" postQueryString="false">
+        <con:settings>
+          <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment xmlns:con="http://eviware.com/soapui/config">
+  &lt;con:entry key="BATAV-JWT-TOKEN" value="${#TestCase#authHeader}"/>
+  &lt;con:entry key="Case-Last-Modified" value="${#TestCase#Case-Last-Modified}"/>
+&lt;/xml-fragment></con:setting>
+        </con:settings>
+        <con:endpoint>http://localhost:2027</con:endpoint>
+        <con:request>{
+	"Diagnosis": {
+		"Condition": "Condition of Patient",
+		"Use": "Use",
+		"Rank": "Rank of Cancer",
+		"Notes": "Notesasdfasdf",
+		"Date": "2019-06-13"
+	}
+}</con:request>
+        <con:originalUri>http://localhost/tasks/7fca29a4_6382_40fb_be13_5731c8928769/complete</con:originalUri>
+        <con:assertion id="0053aee3-27f6-4ba5-b641-faf46147ee5f" name="Valid HTTP Status Codes" type="Valid HTTP Status Codes">
+          <con:configuration>
+            <codes>202</codes>
+          </con:configuration>
+        </con:assertion>
+        <con:credentials>
+          <con:authType>No Authorization</con:authType>
+        </con:credentials>
+        <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+        <con:jmsPropertyConfig/>
+        <con:parameters>
+          <con:entry key="taskId" value="${#TestCase#taskId}"/>
+          <con:entry key="transition" value="complete"/>
+        </con:parameters>
+      </con:restRequest>
+    </con:config>
+  </con:testStep>
+  <con:testStep id="ae56d0a1-add4-4ff0-b3e4-6f6f6659fbf8" name="Get All Tasks of MultidisplinaryTeam" type="restrequest">
+    <con:settings/>
+    <con:config methodName="Get All Tasks By CaseInstance" resourcePath="/tasks" service="http://localhost:2027" xsi:type="con:RestRequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <con:restRequest id="c976c693-eed6-4760-ba39-3e3aab071d25" mediaType="application/json" name="Get All Tasks of MultidisplinaryTeam">
+        <con:settings>
+          <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment xmlns:con="http://eviware.com/soapui/config">
+  &lt;con:entry key="BATAV-JWT-TOKEN" value="${#TestCase#authHeader}"/>
+  &lt;con:entry key="Case-Last-Modified" value="${#TestCase#Case-Last-Modified}"/>
+&lt;/xml-fragment></con:setting>
+        </con:settings>
+        <con:encoding>UTF-8</con:encoding>
+        <con:endpoint>http://localhost:2027</con:endpoint>
+        <con:request/>
+        <con:originalUri>http://localhost/cases/caseInstanceId</con:originalUri>
+        <con:assertion id="7b42ee5e-7fb7-4d28-9f2c-42db9d00ee10" name="Valid HTTP Status Codes" type="Valid HTTP Status Codes">
+          <con:configuration>
+            <codes>200</codes>
+          </con:configuration>
+        </con:assertion>
+        <con:credentials>
+          <con:authType>No Authorization</con:authType>
+        </con:credentials>
+        <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+        <con:jmsPropertyConfig/>
+        <con:parameters>
+          <entry key="caseInstanceId" value="${#TestCase#subCaseId}" xmlns="http://eviware.com/soapui/config"/>
+        </con:parameters>
+        <con:parameterOrder/>
+      </con:restRequest>
+    </con:config>
+  </con:testStep>
+  <con:testStep id="e750eada-749b-4323-b13c-fd3bd93be467" name="get taskId for CD MultidisplinaryTeam" type="transfer">
+    <con:settings/>
+    <con:config xsi:type="con:PropertyTransfersStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <con:transfers entitize="false" failOnError="true" ignoreEmpty="false" setNullOnMissingSource="true" transferChildNodes="false" transferTextContent="true" transferToAll="false">
+        <con:name>taskId</con:name>
+        <con:sourceType>Response</con:sourceType>
+        <con:sourceStep>Get All Tasks of MultidisplinaryTeam</con:sourceStep>
+        <con:sourcePath>$..[?(@taskName=='Observation from Multidisciplinary Team')].id[0]</con:sourcePath>
+        <con:targetType>taskId</con:targetType>
+        <con:targetStep>#TestCase#</con:targetStep>
+        <con:type>JSONPATH</con:type>
+        <con:targetTransferType>JSONPATH</con:targetTransferType>
+        <con:upgraded>true</con:upgraded>
+      </con:transfers>
+    </con:config>
+  </con:testStep>
+  <con:testStep id="4dc548c1-b149-4f5d-ab5c-f6b0a405cf3e" name="ClaimTask CD MultidisplinaryTeam" type="restrequest">
+    <con:settings/>
+    <con:config methodName="Method 1" resourcePath="/tasks/{taskId}/{action}" service="http://localhost:2027" xsi:type="con:RestRequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <con:restRequest id="657b2b47-7588-41d1-a9fa-21df31c20f04" mediaType="application/json" name="ClaimTask CD MultidisplinaryTeam" postQueryString="false">
+        <con:settings>
+          <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;entry key="BATAV-JWT-TOKEN" value="${#TestCase#authHeader}" xmlns="http://eviware.com/soapui/config"/></con:setting>
+        </con:settings>
+        <con:encoding>UTF-8</con:encoding>
+        <con:endpoint>http://localhost:2027</con:endpoint>
+        <con:request/>
+        <con:originalUri>http://localhost/tasks/4d7470d3_7868_483d_9e56_2b08570c3896/claim</con:originalUri>
+        <con:assertion id="43f04286-3e6e-4ffc-960a-06e279fc2642" name="Valid HTTP Status Codes" type="Valid HTTP Status Codes">
+          <con:configuration>
+            <codes>202</codes>
+          </con:configuration>
+        </con:assertion>
+        <con:credentials>
+          <con:authType>No Authorization</con:authType>
+        </con:credentials>
+        <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+        <con:jmsPropertyConfig/>
+        <con:parameters>
+          <con:entry key="taskId" value="${#TestCase#taskId}"/>
+          <con:entry key="action" value="claim"/>
+        </con:parameters>
+        <con:parameterOrder>
+          <con:entry>taskId</con:entry>
+          <con:entry>action</con:entry>
+        </con:parameterOrder>
+      </con:restRequest>
+    </con:config>
+  </con:testStep>
+  <con:testStep id="78d3d34e-9bf9-4276-8d7e-4a4806e533af" name="Get last modified header for case CD for MDT" type="groovy">
+    <con:settings/>
+    <con:config>
+      <script>// get the header from the previous test step.
+def previousStepNumber = context.getCurrentStepIndex()-1
+def headerValue = null
+
+while (previousStepNumber >= 0)
+{
+  def previousStep = testRunner.testCase.getTestStepAt(previousStepNumber)
+  try
+  {
+    headerValue = previousStep.httpRequest.response.responseHeaders["Case-Last-Modified"].get(0)
+    break;
+  }
+  catch(ignorable)
+  {
+  }
+  previousStepNumber--
+
+}
+
+log.info("Case-Last-Modified: " + headerValue.toString())
+// set the property at the test suite level if needed in multiple testcases
+testRunner.testCase.setPropertyValue("Case-Last-Modified", headerValue.toString())</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep id="ef4c810c-75f1-4fd8-a3bd-a3aaa4d1512b" name="CompleteTask MultidisplinaryTeam" type="restrequest">
+    <con:settings/>
+    <con:config methodName="Method 1" resourcePath="/tasks/{taskId}/{transition}" service="http://localhost:2027" xsi:type="con:RestRequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <con:restRequest id="1367a110-8981-4ec6-b978-9935236293a8" mediaType="application/json" name="CompleteTask MultidisplinaryTeam" postQueryString="false">
+        <con:settings>
+          <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment xmlns:con="http://eviware.com/soapui/config">
+  &lt;con:entry key="BATAV-JWT-TOKEN" value="${#TestCase#authHeader}"/>
+  &lt;con:entry key="Case-Last-Modified" value="${#TestCase#Case-Last-Modified}"/>
+&lt;/xml-fragment></con:setting>
+        </con:settings>
+        <con:endpoint>http://localhost:2027</con:endpoint>
+        <con:request>{
+	"TreatmentProposal": {
+		"SurgeryRequired": true,
+		"RadiotherapyRequired": true,
+		"Description": "test description",
+		"Notes": "notes",
+		"MedicalManagement": "MM details"
+	}
+}</con:request>
+        <con:originalUri>http://localhost/tasks/7fca29a4_6382_40fb_be13_5731c8928769/complete</con:originalUri>
+        <con:assertion id="0053aee3-27f6-4ba5-b641-faf46147ee5f" name="Valid HTTP Status Codes" type="Valid HTTP Status Codes">
+          <con:configuration>
+            <codes>202</codes>
+          </con:configuration>
+        </con:assertion>
+        <con:credentials>
+          <con:authType>No Authorization</con:authType>
+        </con:credentials>
+        <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+        <con:jmsPropertyConfig/>
+        <con:parameters>
+          <con:entry key="taskId" value="${#TestCase#taskId}"/>
+          <con:entry key="transition" value="complete"/>
+        </con:parameters>
+      </con:restRequest>
+    </con:config>
+  </con:testStep>
+  <con:testStep id="0421e855-fc6c-48db-a52f-83bc0fea9ec6" name="Get Discretionary Items CD Surgery" type="restrequest">
+    <con:settings/>
+    <con:config methodName="GetDiscretionaryItems" resourcePath="/cases/{caseInstanceId}/discretionaryitems" service="http://localhost:2027" xsi:type="con:RestRequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <con:restRequest id="934b2c6a-98ce-48cd-9ded-a360826ab9af" mediaType="application/json" name="Get Discretionary Items CD Surgery">
+        <con:settings>
+          <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment xmlns:con="http://eviware.com/soapui/config">
+  &lt;con:entry key="BATAV-JWT-TOKEN" value="${#TestCase#authHeader}"/>
+  &lt;con:entry key="Case-Last-Modified" value="${#TestCase#Case-Last-Modified}"/>
+&lt;/xml-fragment></con:setting>
+        </con:settings>
+        <con:encoding>UTF-8</con:encoding>
+        <con:endpoint>http://localhost:2027</con:endpoint>
+        <con:request/>
+        <con:originalUri>http://localhost/cases/5b4c6e04_f6be_4b81_b0df_64086a9cb5e0/discretionaryitems</con:originalUri>
+        <con:assertion id="705f6bf6-1b49-4d81-b03a-e9f9df57c4c0" name="Valid HTTP Status Codes" type="Valid HTTP Status Codes">
+          <con:configuration>
+            <codes>200</codes>
+          </con:configuration>
+        </con:assertion>
+        <con:credentials>
+          <con:authType>No Authorization</con:authType>
+        </con:credentials>
+        <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+        <con:jmsPropertyConfig/>
+        <con:parameters>
+          <entry key="caseInstanceId" value="${#TestCase#subCaseId}" xmlns="http://eviware.com/soapui/config"/>
+        </con:parameters>
+        <con:parameterOrder>
+          <con:entry>caseInstanceId</con:entry>
+        </con:parameterOrder>
+      </con:restRequest>
+    </con:config>
+  </con:testStep>
+  <con:testStep id="5fd64310-a80e-4d4d-bb41-af8fac690452" name="Surgery Discretionay item plan JSON" type="groovy">
+    <con:settings/>
+    <con:config>
+      <script>// get the header from the previous test step.
+/*def jsonSlurper =  new groovy.json.JsonSlurper()
+def obj = jsonSlurper.parseText()
+
+log.info(obj.discretionaryItems[0].id)
+*/
+
+import groovy.json.JsonSlurper
+
+def responseJson = testRunner.testCase.getTestStepByName("Get Discretionary Items CD Surgery").getPropertyValue("response")
+def slurper = new JsonSlurper().parseText(responseJson)
+
+for( def DIs : slurper.discretionaryItems){
+	if((DIs.name).equalsIgnoreCase("Surgery")){
+		testRunner.testCase.setPropertyValue("discretionaryItemsName", DIs.name)
+		testRunner.testCase.setPropertyValue("discretionaryItemsDefinitionId", DIs.id)
+		testRunner.testCase.setPropertyValue("discretionaryItemsParentId", DIs.parentId)
+	//	testRunner.testCase.setPropertyValue("discretionaryItemsplanItemId", DIs)
+	log.info(DIs.name +" --- "+ DIs.id +" --- "+ DIs.parentId)
+	}
+}
+//def testCaseProperty = testRunner.testCase.getPropertyValue("workspace_id")
+
+
+//testRunner.testCase.setPropertyValue("workspace_id", slurper.discretionaryItems[0].id</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep id="d98d6bc2-1476-4fa4-b9b6-3aa2a8aabfa7" name="Plan Discretionary Items CD Surgery" type="restrequest">
+    <con:settings/>
+    <con:config methodName="GetDiscretionaryItems" resourcePath="/cases/{caseInstanceId}/discretionaryitems/plan" service="http://localhost:2027" xsi:type="con:RestRequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <con:restRequest id="e7c63fc3-857a-42e5-a00b-589bc499cd37" mediaType="application/json" name="Plan Discretionary Items CD Surgery" postQueryString="false">
+        <con:settings>
+          <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;entry key="BATAV-JWT-TOKEN" value="${#TestCase#authHeader}" xmlns="http://eviware.com/soapui/config"/></con:setting>
+        </con:settings>
+        <con:endpoint>http://localhost:2027</con:endpoint>
+        <con:request>{
+  "name": "${#TestCase#discretionaryItemsName}",
+  "definitionId": "${#TestCase#discretionaryItemsDefinitionId}",
+  "parentId": "${#TestCase#discretionaryItemsParentId}"
+}</con:request>
+        <con:originalUri>http://localhost/cases/%7B%23TestSuite%23caseInstanceId%7D/discretionaryitems</con:originalUri>
+        <con:assertion id="f1987641-24a8-4db3-a9c4-3e8fa6265b2b" name="Valid HTTP Status Codes" type="Valid HTTP Status Codes">
+          <con:configuration>
+            <codes>200</codes>
+          </con:configuration>
+        </con:assertion>
+        <con:credentials>
+          <con:authType>No Authorization</con:authType>
+        </con:credentials>
+        <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+        <con:jmsPropertyConfig/>
+        <con:parameters>
+          <con:entry key="caseInstanceId" value="${#TestCase#subCaseId}"/>
+          <con:entry key="transition" value="plan"/>
+        </con:parameters>
+        <con:parameterOrder>
+          <con:entry>caseInstanceId</con:entry>
+          <con:entry>transition</con:entry>
+        </con:parameterOrder>
+      </con:restRequest>
+    </con:config>
+  </con:testStep>
+  <con:testStep disabled="true" id="adb82bfc-bf60-4f5a-9796-471713cdb88c" name="Delete Doctor" type="restrequest">
+    <con:settings/>
+    <con:config methodName="Method 1" resourcePath="/batavusers/user/{userId}" service="http://localhost:9200" xsi:type="con:RestRequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <con:restRequest id="e3a4aeb7-b59e-4429-be6d-cbc884d93b9f" mediaType="application/json" name="Delete Doctor" postQueryString="false">
+        <con:settings>
+          <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;entry key="BATAV-JWT-TOKEN" value="${#TestCase#authHeader}" xmlns="http://eviware.com/soapui/config"/></con:setting>
+        </con:settings>
+        <con:encoding>UTF-8</con:encoding>
+        <con:endpoint>http://localhost:9200</con:endpoint>
+        <con:request/>
+        <con:originalUri>http://localhost/batavusers/user/danny</con:originalUri>
+        <con:credentials>
+          <con:authType>No Authorization</con:authType>
+        </con:credentials>
+        <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+        <con:jmsPropertyConfig/>
+        <con:parameters>
+          <entry key="userId" value="${#TestCase#DoctorName}" xmlns="http://eviware.com/soapui/config"/>
+        </con:parameters>
+      </con:restRequest>
+    </con:config>
+  </con:testStep>
+  <con:testStep id="6399d70a-31f3-4ee0-9aab-0de2c1162522" name="Copy of 2000" type="delay">
+    <con:settings/>
+    <con:config>
+      <delay>2000</delay>
+    </con:config>
+  </con:testStep>
+  <con:testStep id="1cc78bf1-e75e-4bee-bfb8-9d4f307aa323" name="GetCase Surgery" type="restrequest">
+    <con:settings/>
+    <con:config methodName="GetCase" resourcePath="/cases/{caseInstanceId}" service="http://localhost:2027" xsi:type="con:RestRequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <con:restRequest id="c976c693-eed6-4760-ba39-3e3aab071d25" mediaType="application/json" name="GetCase Surgery">
+        <con:settings>
+          <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment xmlns:con="http://eviware.com/soapui/config">
+  &lt;con:entry key="BATAV-JWT-TOKEN" value="${#TestCase#authHeader}"/>
+  &lt;con:entry key="Case-Last-Modified" value="${#TestCase#Case-Last-Modified}"/>
+&lt;/xml-fragment></con:setting>
+        </con:settings>
+        <con:encoding>UTF-8</con:encoding>
+        <con:endpoint>http://localhost:2027</con:endpoint>
+        <con:request/>
+        <con:originalUri>http://localhost/cases/caseInstanceId</con:originalUri>
+        <con:assertion id="8005ea66-3f4b-41ba-bd83-f3b303bc1fdd" name="Valid HTTP Status Codes" type="Valid HTTP Status Codes">
+          <con:configuration>
+            <codes>200</codes>
+          </con:configuration>
+        </con:assertion>
+        <con:credentials>
+          <con:authType>No Authorization</con:authType>
+        </con:credentials>
+        <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+        <con:jmsPropertyConfig/>
+        <con:parameters>
+          <entry key="caseInstanceId" value="${#TestCase#subCaseId}" xmlns="http://eviware.com/soapui/config"/>
+        </con:parameters>
+        <con:parameterOrder>
+          <con:entry>caseInstanceId</con:entry>
+        </con:parameterOrder>
+      </con:restRequest>
+    </con:config>
+  </con:testStep>
+  <con:testStep id="795d3fa7-0a21-4359-8ee8-e833da6b46ea" name="Get caseInstanceId of Surgery" type="transfer">
+    <con:settings/>
+    <con:config xsi:type="con:PropertyTransfersStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <con:transfers entitize="false" failOnError="true" ignoreEmpty="false" setNullOnMissingSource="true" transferChildNodes="false" transferTextContent="false" transferToAll="false">
+        <con:name>caseInstanceId</con:name>
+        <con:sourceType>Response</con:sourceType>
+        <con:sourceStep>GetCase Surgery</con:sourceStep>
+        <con:sourcePath>$..[?(@name=='Surgery')].id[0]</con:sourcePath>
+        <con:targetType>subSubCaseInstanceId</con:targetType>
+        <con:targetStep>#TestCase#</con:targetStep>
+        <con:type>JSONPATH</con:type>
+        <con:targetTransferType>JSONPATH</con:targetTransferType>
+        <con:upgraded>true</con:upgraded>
+      </con:transfers>
+    </con:config>
+  </con:testStep>
+  <con:testStep id="b7e684b6-ace0-4f7b-afb9-fd206d0dc943" name="Get All Tasks By CaseInstanceId Surgery" type="restrequest">
+    <con:settings/>
+    <con:config methodName="Get All Tasks By CaseInstance" resourcePath="/tasks" service="http://localhost:2027" xsi:type="con:RestRequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <con:restRequest id="c976c693-eed6-4760-ba39-3e3aab071d25" mediaType="application/json" name="Get All Tasks By CaseInstanceId Surgery">
+        <con:settings>
+          <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment xmlns:con="http://eviware.com/soapui/config">
+  &lt;con:entry key="BATAV-JWT-TOKEN" value="${#TestCase#authHeader}"/>
+  &lt;con:entry key="Case-Last-Modified" value="${#TestCase#Case-Last-Modified}"/>
+&lt;/xml-fragment></con:setting>
+        </con:settings>
+        <con:encoding>UTF-8</con:encoding>
+        <con:endpoint>http://localhost:2027</con:endpoint>
+        <con:request/>
+        <con:originalUri>http://localhost/cases/caseInstanceId</con:originalUri>
+        <con:assertion id="7b42ee5e-7fb7-4d28-9f2c-42db9d00ee10" name="Valid HTTP Status Codes" type="Valid HTTP Status Codes">
+          <con:configuration>
+            <codes>200</codes>
+          </con:configuration>
+        </con:assertion>
+        <con:credentials>
+          <con:authType>No Authorization</con:authType>
+        </con:credentials>
+        <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+        <con:jmsPropertyConfig/>
+        <con:parameters>
+          <entry key="caseInstanceId" value="${#TestCase#subSubCaseInstanceId}" xmlns="http://eviware.com/soapui/config"/>
+        </con:parameters>
+        <con:parameterOrder/>
+      </con:restRequest>
+    </con:config>
+  </con:testStep>
+  <con:testStep id="de112743-cb73-483f-9dbd-a91203e47525" name="Get taskId for Surgery Educational Material" type="transfer">
+    <con:settings/>
+    <con:config xsi:type="con:PropertyTransfersStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <con:transfers entitize="false" failOnError="true" ignoreEmpty="false" setNullOnMissingSource="true" transferChildNodes="false" transferTextContent="true" transferToAll="false">
+        <con:name>taskId</con:name>
+        <con:sourceType>Response</con:sourceType>
+        <con:sourceStep>Get All Tasks By CaseInstanceId Surgery</con:sourceStep>
+        <con:sourcePath>$..[?(@taskName=='Provide Educational Material to Patient')].id[0]</con:sourcePath>
+        <con:targetType>taskId</con:targetType>
+        <con:targetStep>#TestCase#</con:targetStep>
+        <con:type>JSONPATH</con:type>
+        <con:targetTransferType>JSONPATH</con:targetTransferType>
+        <con:upgraded>true</con:upgraded>
+      </con:transfers>
+    </con:config>
+  </con:testStep>
+  <con:testStep id="5423d24d-8cfa-4da6-8b71-3dae1c28c609" name="ClaimTask Surgery Educational Material" type="restrequest">
+    <con:settings/>
+    <con:config methodName="Method 1" resourcePath="/tasks/{taskId}/{action}" service="http://localhost:2027" xsi:type="con:RestRequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <con:restRequest id="657b2b47-7588-41d1-a9fa-21df31c20f04" mediaType="application/json" name="ClaimTask Surgery Educational Material" postQueryString="false">
+        <con:settings>
+          <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;entry key="BATAV-JWT-TOKEN" value="${#TestCase#authHeader}" xmlns="http://eviware.com/soapui/config"/></con:setting>
+        </con:settings>
+        <con:encoding>UTF-8</con:encoding>
+        <con:endpoint>http://localhost:2027</con:endpoint>
+        <con:request/>
+        <con:originalUri>http://localhost/tasks/4d7470d3_7868_483d_9e56_2b08570c3896/claim</con:originalUri>
+        <con:assertion id="43f04286-3e6e-4ffc-960a-06e279fc2642" name="Valid HTTP Status Codes" type="Valid HTTP Status Codes">
+          <con:configuration>
+            <codes>202</codes>
+          </con:configuration>
+        </con:assertion>
+        <con:credentials>
+          <con:authType>No Authorization</con:authType>
+        </con:credentials>
+        <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+        <con:jmsPropertyConfig/>
+        <con:parameters>
+          <con:entry key="taskId" value="${#TestCase#taskId}"/>
+          <con:entry key="action" value="claim"/>
+        </con:parameters>
+        <con:parameterOrder>
+          <con:entry>taskId</con:entry>
+          <con:entry>action</con:entry>
+        </con:parameterOrder>
+      </con:restRequest>
+    </con:config>
+  </con:testStep>
+  <con:testStep id="9bcadf9b-9b0f-48ba-875d-8eb4a262aff7" name="Get last modified header for case Educational Material" type="groovy">
+    <con:settings/>
+    <con:config>
+      <script>// get the header from the previous test step.
+def previousStepNumber = context.getCurrentStepIndex()-1
+def headerValue = null
+
+while (previousStepNumber >= 0)
+{
+  def previousStep = testRunner.testCase.getTestStepAt(previousStepNumber)
+  try
+  {
+    headerValue = previousStep.httpRequest.response.responseHeaders["Case-Last-Modified"].get(0)
+    break;
+  }
+  catch(ignorable)
+  {
+  }
+  previousStepNumber--
+
+}
+
+log.info("Case-Last-Modified: " + headerValue.toString())
+// set the property at the test suite level if needed in multiple testcases
+testRunner.testCase.setPropertyValue("Case-Last-Modified", headerValue.toString())</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep id="b9f698dc-cea2-46b0-9865-2c3dd199d66f" name="CompleteTask Educational Material" type="restrequest">
+    <con:settings/>
+    <con:config methodName="Method 1" resourcePath="/tasks/{taskId}/{transition}" service="http://localhost:2027" xsi:type="con:RestRequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <con:restRequest id="1367a110-8981-4ec6-b978-9935236293a8" mediaType="application/json" name="CompleteTask Educational Material" postQueryString="false">
+        <con:settings>
+          <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment xmlns:con="http://eviware.com/soapui/config">
+  &lt;con:entry key="BATAV-JWT-TOKEN" value="${#TestCase#authHeader}"/>
+  &lt;con:entry key="Case-Last-Modified" value="${#TestCase#Case-Last-Modified}"/>
+&lt;/xml-fragment></con:setting>
+        </con:settings>
+        <con:endpoint>http://localhost:2027</con:endpoint>
+        <con:request>{}</con:request>
+        <con:originalUri>http://localhost/tasks/7fca29a4_6382_40fb_be13_5731c8928769/complete</con:originalUri>
+        <con:assertion id="0053aee3-27f6-4ba5-b641-faf46147ee5f" name="Valid HTTP Status Codes" type="Valid HTTP Status Codes">
+          <con:configuration>
+            <codes>202</codes>
+          </con:configuration>
+        </con:assertion>
+        <con:credentials>
+          <con:authType>No Authorization</con:authType>
+        </con:credentials>
+        <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+        <con:jmsPropertyConfig/>
+        <con:parameters>
+          <con:entry key="taskId" value="${#TestCase#taskId}"/>
+          <con:entry key="transition" value="complete"/>
+        </con:parameters>
+      </con:restRequest>
+    </con:config>
+  </con:testStep>
+  <con:loadTest id="de478497-7648-4e04-9149-9721dd763f75" name="LoadTest 1">
+    <con:settings>
+      <con:setting id="HttpSettings@close-connections">false</con:setting>
+    </con:settings>
+    <con:threadCount>5</con:threadCount>
+    <con:startDelay>0</con:startDelay>
+    <con:sampleInterval>250</con:sampleInterval>
+    <con:calculateTPSOnTimePassed>true</con:calculateTPSOnTimePassed>
+    <con:resetStatisticsOnThreadCountChange>true</con:resetStatisticsOnThreadCountChange>
+    <con:historyLimit>-1</con:historyLimit>
+    <con:testLimit>60</con:testLimit>
+    <con:limitType>TIME</con:limitType>
+    <con:loadStrategy>
+      <con:type>Simple</con:type>
+    </con:loadStrategy>
+    <con:assertion name="Step Status" type="Step Status"/>
+    <con:maxAssertionErrors>100</con:maxAssertionErrors>
+    <con:cancelExcessiveThreads>true</con:cancelExcessiveThreads>
+    <con:strategyInterval>500</con:strategyInterval>
+  </con:loadTest>
+  <con:loadTest id="1af1e723-4f9b-4acb-8848-b7f63a56ad57" name="LoadTest 2">
+    <con:settings>
+      <con:setting id="HttpSettings@close-connections">false</con:setting>
+    </con:settings>
+    <con:threadCount>30</con:threadCount>
+    <con:startDelay>0</con:startDelay>
+    <con:sampleInterval>250</con:sampleInterval>
+    <con:calculateTPSOnTimePassed>true</con:calculateTPSOnTimePassed>
+    <con:resetStatisticsOnThreadCountChange>true</con:resetStatisticsOnThreadCountChange>
+    <con:historyLimit>-1</con:historyLimit>
+    <con:testLimit>60</con:testLimit>
+    <con:limitType>TIME</con:limitType>
+    <con:loadStrategy>
+      <con:type>Simple</con:type>
+      <con:config>
+        <testDelay>250</testDelay>
+        <randomFactor>0.5</randomFactor>
+      </con:config>
+    </con:loadStrategy>
+    <con:assertion name="Step Status" type="Step Status"/>
+    <con:maxAssertionErrors>100</con:maxAssertionErrors>
+    <con:cancelExcessiveThreads>true</con:cancelExcessiveThreads>
+    <con:strategyInterval>500</con:strategyInterval>
+  </con:loadTest>
+  <con:properties>
+    <con:property>
+      <con:name>authHeader</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>caseInstanceId</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>Case-Last-Modified</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>subCaseId</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>subCase-Last-Modified</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>planItemId</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>Last-Modified</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>LastModified</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>subSubCaseInstanceId</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>taskId</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>userEventId</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>RequestorName</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>RequestorPwd</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>ApproverName</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>ApproverPwd</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>context</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>AdminName</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>AdminPwd</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>ReceiverEmail</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>Doctor</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>DoctorName</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>DoctorPwd</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>DoctorEmail</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>Patient</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>PatientName</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>PatientPwd</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>PatientEmail</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>discretionaryItems</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>discretionaryItemsName</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>discretionaryItemsDefinitionId</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>discretionaryItemsParentId</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>discretionaryItemsplanItemId</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>Test</con:name>
+      <con:value/>
+    </con:property>
+  </con:properties>
+</con:testCase>

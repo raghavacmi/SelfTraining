@@ -1,0 +1,101 @@
+<case id="DiabetesDiagnosis.case" name="DiabetesDiagnosis" description="Diabetes Diagnosis" guid="_rFaGI">
+    <caseFileModel>
+        <caseFileItem id="_rFaGI_0" name="Patient" multiplicity="ExactlyOne" definitionRef="patient.cfid"/>
+        <caseFileItem id="_rFaGI_16" name="Appointment" multiplicity="ExactlyOne" definitionRef="appointment.cfid"/>
+        <caseFileItem id="_rFaGI_22" name="Notes" multiplicity="ExactlyOne" definitionRef="notes.cfid"/>
+    </caseFileModel>
+    <casePlanModel id="cm__rFaGI_0" name="DiabetesDiagnosis" autoComplete="true">
+        <planItem id="pi_ct__rFaGI_0" name="Appointment" definitionRef="ct__rFaGI_0"/>
+        <planItem id="pi_ht__rFaGI_0" name="Doctor Observations" definitionRef="ht__rFaGI_0">
+            <entryCriterion id="_rFaGI_6" name="EntryCriterion_0" sentryRef="crit__rFaGI_0"/>
+        </planItem>
+        <sentry id="crit__rFaGI_0" name="Sentry_0">
+            <planItemOnPart id="_rFaGI_8" name="PlanItemOnPart_0" sourceRef="pi_ct__rFaGI_0">
+                <standardEvent>complete</standardEvent>
+            </planItemOnPart>
+        </sentry>
+        <humanTask id="ht__rFaGI_0" name="Doctor Observations" isBlocking="true">
+            <inputs id="_rFaGI_17" name="Notes" bindingRef="_rFaGI_22"/>
+            <outputs id="_rFaGI_19" name="Notes" bindingRef="_rFaGI_22"/>
+            <extensionElements mustUnderstand="false">
+                <batav:implementation xmlns:batav="io.batav" humanTaskRef="NotesHT.humantask">
+                    <parameterMapping id="_rFaGI_18" name="ParameterMapping_6" sourceRef="_rFaGI_17" targetRef="_js9D_Notes"/>
+                    <parameterMapping id="_rFaGI_20" name="ParameterMapping_7" sourceRef="_L3ka_Notes" targetRef="_rFaGI_19"/>
+                </batav:implementation>
+            </extensionElements>
+        </humanTask>
+        <caseTask id="ct__rFaGI_0" name="Appointment" isBlocking="true" caseRef="Appointment.case">
+            <inputs id="_rFaGI_10" name="Patient" bindingRef="_rFaGI_0"/>
+            <outputs id="_rFaGI_13" name="Appointment" bindingRef="_rFaGI_16"/>
+            <parameterMapping id="_rFaGI_14" name="ParameterMapping_4" sourceRef="_Zjy8C_5" targetRef="_rFaGI_13"/>
+            <parameterMapping id="_rFaGI_9" name="ParameterMapping_2" sourceRef="_rFaGI_10" targetRef="_Zjy8C_6"/>
+        </caseTask>
+    </casePlanModel>
+    <input id="_rFaGI_7" name="Patient" bindingRef="_rFaGI_0"/>
+    <extensionElements mustUnderstand="false">
+        <batav:start-case-model xmlns:batav="io.batav">{
+	"schema": {
+		"type": "object",
+		"properties": {
+			"Patient": {
+				"$ref": "#/definitions/Patient"
+			}
+		},
+		"definitions": {
+			"Patient": {
+				"title": "Patient Details",
+				"description": "Please fill details",
+				"type": "object",
+				"required": [
+					"ID",
+					"Name"
+				],
+				"properties": {
+					"Name": {
+						"type": "string",
+						"title": "Name",
+						"default": "Name"
+					},
+					"Gender": {
+						"type": "string",
+						"title": "Gender"
+					},
+					"DateOfBirth": {
+						"type": "string",
+						"format": "date",
+						"title": "Date of Birth"
+					},
+					"Address": {
+						"type":"string",
+						"title": "Address"
+					},
+					"ID": {
+						"type": "string",
+						"title": "PatientID",
+						"default": "ID"
+					},
+					"Active": {
+						"type": "boolean",
+						"title": "Active"
+					},
+					"Telecom": {
+						"type": "string",
+						"title": "Telecom",
+						"minLength": 10
+					},
+					"Email": {
+						"type": "string",
+						"title": "Email"
+					}
+				}
+			}
+		}
+	},
+	"uiSchema": {
+		"Address": {
+			"ui:widget": "textarea"
+		}
+	}
+}</batav:start-case-model>
+    </extensionElements>
+</case>

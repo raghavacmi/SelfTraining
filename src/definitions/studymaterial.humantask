@@ -1,0 +1,42 @@
+<humantask>
+    <batav:implementation xmlns:batav="io.batav" name="studymaterial" description="Study Material" class="io.batav.cmmn.definition.task.WorkflowTaskDefinition">
+        <input id="_FKzg_StudyMaterial" name="StudyMaterial"/>
+        <output id="_Uvyt_StudyMaterial" name="StudyMaterial"/>
+        <task-model>{
+	"schema": {
+		"type": "object",
+		"properties": {
+			"StudyMaterial": {
+				"$ref": "#/definitions/StudyMaterial"
+			}
+		},
+		"definitions": {
+			"largeEnum": {
+				"type": "string",
+				"enum": [
+					"option A",
+					"option B",
+					"option C",
+					"option D"
+				]
+			},
+			"StudyMaterial": {
+				"title": " Surgery Study Material",
+				"type": "object",
+				"properties": {
+					"Question1": {
+						"$ref": "#/definitions/largeEnum"
+					},
+					"Question2": {
+						"$ref": "#/definitions/largeEnum"
+					},
+					"Question3": {
+						"$ref": "#/definitions/largeEnum"
+					}
+				}
+			}
+		}
+	}
+}</task-model>
+    </batav:implementation>
+</humantask>

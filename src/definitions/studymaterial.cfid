@@ -1,0 +1,5 @@
+<caseFileItemDefinition name="studymaterial" definitionType="http://www.omg.org/spec/CMMN/DefinitionType/Unspecified">
+    <property name="Question1" type="http://www.omg.org/spec/CMMN/PropertyType/string"/>
+    <property name="Question2" type="http://www.omg.org/spec/CMMN/PropertyType/string"/>
+    <property name="Question3" type="http://www.omg.org/spec/CMMN/PropertyType/string"/>
+</caseFileItemDefinition>

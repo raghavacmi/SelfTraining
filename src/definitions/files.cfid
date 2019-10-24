@@ -1,0 +1,3 @@
+<caseFileItemDefinition name="files" definitionType="http://www.omg.org/spec/CMMN/DefinitionType/Unspecified">
+    <property name="File" type="http://www.omg.org/spec/CMMN/PropertyType/Unspecified"/>
+</caseFileItemDefinition>

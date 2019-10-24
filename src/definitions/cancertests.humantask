@@ -1,0 +1,68 @@
+<humantask>
+    <batav:implementation xmlns:batav="io.batav" name="cancertests" description="Cancer Tests" class="io.batav.cmmn.definition.task.WorkflowTaskDefinition">
+        <input id="_3ELs_Tests" name="Tests"/>
+        <output id="_Hhvq_Tests" name="Tests"/>
+        <task-model>{
+	"schema": {
+		"type": "object",
+		"properties": {
+			"Tests": {
+				"$ref": "#/definitions/Tests"
+			}
+		},
+		"definitions": {
+			"Tests": {
+				"type": "object",
+				"properties": {
+					"TestNotes": {
+						"type": "array",
+						"items": {
+							"type": "object",
+							"properties": {
+								"BloodPressure": {
+									"title": "Blood Pressure",
+									"type": "string"
+								},
+								"CompleteBloodCount": {
+									"title": "CompleteBloodCount",
+									"type": "string"
+								},
+								"BloodProteinTest": {
+									"title": "Blood Protein Test",
+									"type": "string"
+								},
+								"TumorMarkerTest": {
+									"title": "Tumor Marker Test",
+									"type": "string"
+								},
+								"CirculatingTumorCellTest": {
+									"title": "Circulating Tumor Cell Test",
+									"type": "string"
+								},
+								"Endoscopy": {
+									"title": "Endoscopy",
+									"type": "string"
+								},
+								"Biopsy": {
+									"title": "Biopsy",
+									"type": "string"
+								},
+								"Author": {
+									"title": "Author",
+									"type": "string"
+								},
+								"Date": {
+									"title": "Date",
+									"type": "string",
+									"format": "date-time"
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}</task-model>
+    </batav:implementation>
+</humantask>

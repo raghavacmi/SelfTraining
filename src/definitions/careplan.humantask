@@ -1,0 +1,37 @@
+<humantask>
+    <batav:implementation xmlns:batav="io.batav" name="careplan" description="Care Plan" class="io.batav.cmmn.definition.task.WorkflowTaskDefinition">
+        <output id="_Q21F_CarePlan" name="CarePlan"/>
+        <task-model>{
+	"schema": {
+		"type": "object",
+		"properties": {
+			"CarePlan": {
+				"$ref": "#/definitions/CarePlan"
+			}
+		},
+		"definitions": {
+			"CarePlan": {
+                "type": "object",
+                "properties": {
+                  "Contents": {
+                    "type": "string",
+                    "title": "Contents",
+                    "default": "Contents related Diagonsis of the Patient"
+                  },
+                  "Date": {
+                    "type": "string",
+                    "format": "date",
+                    "title": "Date"
+                  },
+                  "Author": {
+                    "type": "string",
+                    "title": "Author",
+                    "default": "Author"
+                  }
+                }
+			}
+		}
+	}
+}</task-model>
+    </batav:implementation>
+</humantask>

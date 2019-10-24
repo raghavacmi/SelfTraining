@@ -1,0 +1,11 @@
+<caseFileItemDefinition name="testnotes" definitionType="http://www.omg.org/spec/CMMN/DefinitionType/Unspecified">
+    <property name="BloodPressure" type="http://www.omg.org/spec/CMMN/PropertyType/string"/>
+    <property name="CompleteBloodCount" type="http://www.omg.org/spec/CMMN/PropertyType/string"/>
+    <property name="BloodProteinTest" type="http://www.omg.org/spec/CMMN/PropertyType/string"/>
+    <property name="TumorMarkerTest" type="http://www.omg.org/spec/CMMN/PropertyType/string"/>
+    <property name="CirculatingTumorCellTest" type="http://www.omg.org/spec/CMMN/PropertyType/string"/>
+    <property name="Endoscopy" type="http://www.omg.org/spec/CMMN/PropertyType/string"/>
+    <property name="Biopsy" type="http://www.omg.org/spec/CMMN/PropertyType/string"/>
+    <property name="Author" type="http://www.omg.org/spec/CMMN/PropertyType/string"/>
+    <property name="Date" type="http://www.omg.org/spec/CMMN/PropertyType/dateTime"/>
+</caseFileItemDefinition>

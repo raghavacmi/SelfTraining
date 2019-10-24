@@ -1,0 +1,45 @@
+<humantask>
+    <batav:implementation xmlns:batav="io.batav" name="multidisciplinaryteam" description="Multi Disciplinary Team" class="io.batav.cmmn.definition.task.WorkflowTaskDefinition">
+        <input id="_nzHo_TreatmentProposal" name="TreatmentProposal"/>
+        <output id="_FE1s_TreatmentProposal" name="TreatmentProposal"/>
+        <task-model>{
+	"schema": {
+		"type": "object",
+		"properties": {
+			"TreatmentProposal": {
+				"$ref": "#/definitions/TreatmentProposal"
+			}
+		},
+		"definitions": {
+			"TreatmentProposal": {
+				"title": "Treatment Proposal Details",
+				"type": "object",
+				"properties": {
+					"SurgeryRequired": {
+						"type": "boolean",
+						"title": "Surgery Required"
+					},
+					"RadiotherapyRequired": {
+						"type": "boolean",
+						"title":  "Radiotherapy Required"
+					},
+					"Description": {
+						"type": "string",
+						"title": "Description"
+					},
+					"Notes": {
+						"type":"string",
+						"title": "Notes"
+					},
+					"MedicalManagement": {
+						"type": "string",
+						"title": "Medical Management",
+						"default": "MM details"
+					}
+				}
+			}
+		}
+	}
+}</task-model>
+    </batav:implementation>
+</humantask>

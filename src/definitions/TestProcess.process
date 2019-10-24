@@ -1,0 +1,12 @@
+<process name="TestProcess" description="TestProcess">
+    <extensionElements>
+        <batav:implementation xmlns:batav="io.batav" class="io.batav.cmmn.instance.process.http.HTTPCallDefinition">
+            <url>http://localhost:8080/somecall</url>
+            <method>POST</method>
+            <post-content>null</post-content>
+            <http-headers>
+                <http-header name="Content-Type">application/json</http-header>
+            </http-headers>
+        </batav:implementation>
+    </extensionElements>
+</process>

@@ -1,0 +1,23 @@
+<process name="sendEMailPatient" description="">
+    <input id="_6cx0_Patient" name="PatientEmail"/>
+    <input id="_c50R_Appointment" name="AppointmentDate"/>
+    <input id="_1cIB_AppointmentTime" name="AppointmentTime"/>
+    <input id="_D8PG_PatientName" name="PatientName"/>
+    <extensionElements>
+        <batav:implementation xmlns:batav="io.batav" class="io.batav.cmmn.instance.process.smtp.SMTPCallDefinition">
+            <smtp-server>mailcatcher</smtp-server>
+            <smtp-port>1025</smtp-port>
+            <subject>New appointment booked</subject>
+            <mail-body type="text/html">
+                <![CDATA[
+		<html><body><h3 style="font:'Arial, sans-serif';background-color:rgb(128, 196, 84);">A new appointment is booked for you</h3><p>Dear Mr, Mrs. ${PatientName},</p><p>A new appointment has been booked for you.</p><p>You are expected in hospital on <b>${AppointmentDate}</b>, at <b>${AppointmentTime}</b>.</p><p>For your convencience we recommend to start early and arrive in time.</p><p>Please contact us if you are not able to make it to the appointment.</p><p>Kind regards,</p><p>Demo Hospital</p></body></html>
+]]>
+            </mail-body>
+            <from>support@demo-hospital.com</from>
+            <reply-to>practitioner@demo-hospital.com</reply-to>
+            <to>
+                <address name="customer">${PatientEmail}</address>
+            </to>
+        </batav:implementation>
+    </extensionElements>
+</process>

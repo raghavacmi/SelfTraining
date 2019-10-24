@@ -1,0 +1,11 @@
+<caseFileItemDefinition name="patient" definitionType="http://www.omg.org/spec/CMMN/DefinitionType/Unspecified">
+    <property name="ID" type="http://www.omg.org/spec/CMMN/PropertyType/string"/>
+    <property name="Name" type="http://www.omg.org/spec/CMMN/PropertyType/string"/>
+    <property name="Gender" type="http://www.omg.org/spec/CMMN/PropertyType/string"/>
+    <property name="DateOfBirth" type="http://www.omg.org/spec/CMMN/PropertyType/string"/>
+    <property name="Address" type="http://www.omg.org/spec/CMMN/PropertyType/string"/>
+    <property name="Active" type="http://www.omg.org/spec/CMMN/PropertyType/string"/>
+    <property name="Telecom" type="http://www.omg.org/spec/CMMN/PropertyType/string"/>
+    <property name="Email" type="http://www.omg.org/spec/CMMN/PropertyType/string"/>
+    <property name="Photo" type="http://www.omg.org/spec/CMMN/PropertyType/string"/>
+</caseFileItemDefinition>

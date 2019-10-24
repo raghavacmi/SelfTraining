@@ -1,0 +1,116 @@
+<case id="Consultation.case" name="Consultation" guid="_NiueF">
+    <caseFileModel>
+        <caseFileItem id="_2RN5e_0" name="Patient" multiplicity="ExactlyOne" definitionRef="patient.cfid"/>
+        <caseFileItem id="_2RN5e_1" name="Provider" multiplicity="ExactlyOne" definitionRef="person.cfid"/>
+        <caseFileItem id="_2RN5e_9" name="Diagnosis" multiplicity="ExactlyOne" definitionRef="diagnosis.cfid"/>
+        <caseFileItem id="_2RN5e_17" name="Appointment" multiplicity="ExactlyOne" definitionRef="appointment.cfid"/>
+    </caseFileModel>
+    <casePlanModel id="cm__2RN5e_0" name="Consultation" autoComplete="true">
+        <planItem id="pi_ct__2RN5e_0" name="Plan Consultation" definitionRef="ct__2RN5e_0"/>
+        <planItem id="pi_ht__2RN5e_1" name="Encounter" definitionRef="ht__2RN5e_1">
+            <entryCriterion id="_2RN5e_10" name="EntryCriterion_0" sentryRef="crit__2RN5e_0"/>
+        </planItem>
+        <planItem id="pi_ht__2RN5e_3" name="Store new information in Diagnosis" description="Store new information&#10; in Diagnosis" definitionRef="ht__2RN5e_3"/>
+        <sentry id="crit__2RN5e_0" name="Sentry_0">
+            <planItemOnPart id="_2RN5e_18" name="PlanItemOnPart_0" sourceRef="pi_ct__2RN5e_0">
+                <standardEvent>complete</standardEvent>
+            </planItemOnPart>
+        </sentry>
+        <sentry id="crit__2RN5e_1" name="Sentry_1">
+            <planItemOnPart id="_2RN5e_21" name="PlanItemOnPart_1" sourceRef="pi_ct__2RN5e_0">
+                <standardEvent>complete</standardEvent>
+            </planItemOnPart>
+        </sentry>
+        <humanTask id="ht__2RN5e_1" name="Encounter" isBlocking="true">
+            <inputs id="_2RN5e_25" name="Appointment" bindingRef="_2RN5e_17"/>
+            <extensionElements mustUnderstand="false">
+                <batav:implementation xmlns:batav="io.batav" humanTaskRef="physicalencounter.humantask">
+                    <parameterMapping id="_2RN5e_26" name="ParameterMapping_6" sourceRef="_2RN5e_25" targetRef="_Lrdk_Appointment"/>
+                </batav:implementation>
+            </extensionElements>
+        </humanTask>
+        <humanTask id="ht__2RN5e_3" name="Store new information in Diagnosis" description="Store new information&#10; in Diagnosis" isBlocking="true">
+            <inputs id="_2RN5e_3" name="Diagnosis" bindingRef="_2RN5e_9"/>
+            <outputs id="_2RN5e_22" name="Diagnosis" bindingRef="_2RN5e_9"/>
+            <extensionElements mustUnderstand="false">
+                <batav:implementation xmlns:batav="io.batav" humanTaskRef="diagnosisreport.humantask">
+                    <parameterMapping id="_2RN5e_23" name="ParameterMapping_4" sourceRef="_mN7g_Diagnosis" targetRef="_2RN5e_22"/>
+                </batav:implementation>
+            </extensionElements>
+        </humanTask>
+        <caseTask id="ct__2RN5e_0" name="Plan Consultation" isBlocking="true" caseRef="Appointment.case">
+            <inputs id="_2RN5e_11" name="Patient" bindingRef="_2RN5e_0"/>
+            <outputs id="_2RN5e_15" name="Appointment" bindingRef="_2RN5e_17"/>
+            <parameterMapping id="_2RN5e_12" name="ParameterMapping_0" sourceRef="_2RN5e_11" targetRef="_Zjy8C_6"/>
+            <parameterMapping id="_2RN5e_16" name="ParameterMapping_2" sourceRef="_Zjy8C_5" targetRef="_2RN5e_15"/>
+        </caseTask>
+    </casePlanModel>
+    <input id="_2RN5e_2" name="Patient" bindingRef="_2RN5e_0"/>
+    <output id="_2RN5e_8" name="Diagnosis" bindingRef="_2RN5e_9"/>
+    <extensionElements mustUnderstand="false">
+        <batav:start-case-model xmlns:batav="io.batav">{
+	"schema": {
+		"type": "object",
+		"properties": {
+			"Patient": {
+				"$ref": "#/definitions/Patient"
+			}
+		},
+		"definitions": {
+			"Patient": {
+				"title": "Patient Details",
+				"description": "Please fill details",
+				"type": "object",
+				"required": [
+					"ID",
+					"Name"
+				],
+				"properties": {
+					"Name": {
+						"type": "string",
+						"title": "Name",
+						"default": "Name"
+					},
+					"Gender": {
+						"type": "string",
+						"title": "Gender"
+					},
+					"DateOfBirth": {
+						"type": "string",
+						"format": "date",
+						"title": "Date of Birth"
+					},
+					"Address": {
+						"type":"string",
+						"title": "Address"
+					},
+					"ID": {
+						"type": "string",
+						"title": "PatientID",
+						"default": "ID"
+					},
+					"Active": {
+						"type": "boolean",
+						"title": "Active"
+					},
+					"Telecom": {
+						"type": "string",
+						"title": "Telecom",
+						"minLength": 10
+					},
+					"Email": {
+						"type": "string",
+						"title": "Email"
+					}
+				}
+			}
+		}
+	},
+	"uiSchema": {
+		"Address": {
+			"ui:widget": "textarea"
+		}
+	}
+}</batav:start-case-model>
+    </extensionElements>
+</case>

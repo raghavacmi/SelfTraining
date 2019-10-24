@@ -1,0 +1,31 @@
+<humantask>
+    <batav:implementation xmlns:batav="io.batav" name="FileHTwithInput" description="" class="io.batav.cmmn.definition.task.WorkflowTaskDefinition">
+        <input id="_NF7p_Files" name="Files"/>
+        <output id="_Ev13_Files" name="Files"/>
+        <task-model>{
+	"schema": {
+		"type": "object",
+		"properties": {
+			"Files": {
+				"$ref": "#/definitions/Files"
+			}
+		},
+		"definitions": {
+			"Files": {
+				"type": "object",
+				"properties": {
+					"File": {
+						"type": "array",
+						"title": "Multiple files",
+						"items": {
+							"type": "string",
+							"format": "data-url"
+						}
+					}
+				}
+			}
+		}
+	}
+}</task-model>
+    </batav:implementation>
+</humantask>
